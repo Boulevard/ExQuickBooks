@@ -1,6 +1,25 @@
 defmodule QuickBooksTest do
   use ExUnit.Case
+
   doctest QuickBooks
+
+  test "oauth_api/0 returns a URL" do
+    assert QuickBooks.oauth_api |> String.starts_with?("https")
+  end
+
+  test "accounting_api/0 returns the sandbox URL by default" do
+    Application.delete_env(:quickbooks, :use_production_api)
+
+    assert QuickBooks.accounting_api |> String.starts_with?("https")
+    assert QuickBooks.accounting_api |> String.contains?("sandbox")
+  end
+
+  test "accounting_api/0 returns the production URL in production" do
+    Application.put_env(:quickbooks, :use_production_api, true)
+
+    assert QuickBooks.accounting_api |> String.starts_with?("https")
+    refute QuickBooks.accounting_api |> String.contains?("sandbox")
+  end
 
   test "credentials/0 returns the right credentials" do
     Application.put_env(:quickbooks, :consumer_key, "key")
