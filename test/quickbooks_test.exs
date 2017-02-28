@@ -21,6 +21,11 @@ defmodule QuickBooksTest do
     refute QuickBooks.accounting_api |> String.contains?("sandbox")
   end
 
+  test "backend/0 returns the right module" do
+    Application.put_env(:quickbooks, :backend, HTTPoison.Base)
+    assert QuickBooks.backend == HTTPoison.Base
+  end
+
   test "credentials/0 returns the right credentials" do
     Application.put_env(:quickbooks, :consumer_key, "key")
     Application.put_env(:quickbooks, :consumer_secret, "secret")

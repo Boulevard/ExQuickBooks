@@ -3,6 +3,7 @@ defmodule QuickBooks do
   API client for QuickBooks Online.
   """
 
+  @backend_config :backend
   @callback_config :callback_url
   @credential_config [:consumer_key, :consumer_secret]
   @use_production_api_config :use_production_api
@@ -22,6 +23,17 @@ defmodule QuickBooks do
       "https://quickbooks.api.intuit.com/v3/"
     else
       "https://sandbox-quickbooks.api.intuit.com/v3/"
+    end
+  end
+
+  @doc """
+  Returns the configured HTTP backend.
+  """
+  def backend do
+    case get_env(@backend_config) do
+      backend when is_atom(backend) -> backend
+      nil                           -> raise_missing(@backend_config)
+      _                             -> raise_invalid(@backend_config)
     end
   end
 
