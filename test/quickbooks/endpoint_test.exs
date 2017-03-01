@@ -1,10 +1,11 @@
 defmodule QuickBooks.EndpointTest do
   use ExUnit.Case, async: false
+  alias QuickBooks.Endpoint
 
-  doctest QuickBooks.Endpoint
+  doctest Endpoint
 
-  defmodule FooEndpoint do
-    use QuickBooks.Endpoint
+  defmodule TestEndpoint do
+    use Endpoint, base_url: "http://localhost/"
   end
 
   setup do
@@ -12,8 +13,16 @@ defmodule QuickBooks.EndpointTest do
     Application.put_env(:quickbooks, :consumer_secret, "secret")
   end
 
+  test "request/5 prepends the base URL" do
+    TestEndpoint.request(:get, "foo")
+
+    assert_received {:mocked_request, %{
+      url: "http://localhost/" <> _
+    }}
+  end
+
   test "request/5 signs the request" do
-    FooEndpoint.request(:get, "foo")
+    TestEndpoint.request(:get, "foo")
 
     assert_received {:mocked_request, %{
       headers: [{"Authorization", "OAuth " <> _}]
@@ -21,7 +30,7 @@ defmodule QuickBooks.EndpointTest do
   end
 
   test "request/5 preserves body" do
-    FooEndpoint.request(:get, "foo", "bar")
+    TestEndpoint.request(:post, "foo", "bar")
     assert_received {:mocked_request, %{body: "bar"}}
   end
 
@@ -30,7 +39,7 @@ defmodule QuickBooks.EndpointTest do
       params: [{"foo", "bar"}]
     ]
 
-    FooEndpoint.request(:get, "foo", nil, nil, options)
+    TestEndpoint.request(:get, "foo", nil, nil, options)
 
     assert_received {:mocked_request, %{
       options: ^options
@@ -40,7 +49,7 @@ defmodule QuickBooks.EndpointTest do
   test "request/5 preserves extra headers" do
     extra_headers = [{"X-Leo", "is handsome and cool"}]
 
-    FooEndpoint.request(:get, "foo", nil, extra_headers)
+    TestEndpoint.request(:get, "foo", nil, extra_headers)
 
     assert_received {:mocked_request, %{
       headers: [_ | ^extra_headers]

@@ -1,5 +1,5 @@
 defmodule QuickBooksTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: false
 
   doctest QuickBooks
 
@@ -22,8 +22,8 @@ defmodule QuickBooksTest do
   end
 
   test "backend/0 returns the right module" do
-    Application.put_env(:quickbooks, :backend, HTTPoison.Base)
-    assert QuickBooks.backend == HTTPoison.Base
+    Application.put_env(:quickbooks, :backend, QuickBooks.MockBackend)
+    assert QuickBooks.backend == QuickBooks.MockBackend
   end
 
   test "credentials/0 returns the right credentials" do
