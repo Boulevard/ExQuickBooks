@@ -9,11 +9,6 @@ defmodule QuickBooks.EndpointTest do
     use Endpoint, base_url: "http://localhost/"
   end
 
-  setup do
-    Application.put_env(:quickbooks, :consumer_key, "key")
-    Application.put_env(:quickbooks, :consumer_secret, "secret")
-  end
-
   test "request/5 prepends the base URL" do
     TestEndpoint.request(:get, "foo")
 
