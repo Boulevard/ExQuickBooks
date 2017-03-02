@@ -24,10 +24,10 @@ defmodule QuickBooks.OAuth do
     {:error, "Response body was malformed."}
   end
 
-  defp parse_token_response(%{"oauth_token" => token} = body) do
+  defp parse_token_response(body = %{"oauth_token" => token}) do
     {:ok, body, redirect_url(token)}
   end
-  defp parse_token_response(%{"oauth_problem" => _} = body) do
+  defp parse_token_response(body = %{"oauth_problem" => _}) do
     {:error, body}
   end
   defp parse_token_response(_) do
