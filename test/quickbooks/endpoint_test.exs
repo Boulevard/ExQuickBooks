@@ -1,6 +1,7 @@
 defmodule QuickBooks.EndpointTest do
   use ExUnit.Case, async: false
   alias QuickBooks.Endpoint
+  alias QuickBooks.MockBackend
 
   doctest Endpoint
 
@@ -16,22 +17,25 @@ defmodule QuickBooks.EndpointTest do
   test "request/5 prepends the base URL" do
     TestEndpoint.request(:get, "foo")
 
-    assert_received {:mocked_request, %{
+    assert %{
       url: "http://localhost/" <> _
-    }}
+    } = MockBackend.take_request
   end
 
   test "request/5 signs the request" do
     TestEndpoint.request(:get, "foo")
 
-    assert_received {:mocked_request, %{
+    assert %{
       headers: [{"Authorization", "OAuth " <> _}]
-    }}
+    } = MockBackend.take_request
   end
 
   test "request/5 preserves body" do
     TestEndpoint.request(:post, "foo", "bar")
-    assert_received {:mocked_request, %{body: "bar"}}
+
+    assert %{
+      body: "bar"
+    } = MockBackend.take_request
   end
 
   test "request/5 preserves options" do
@@ -41,9 +45,9 @@ defmodule QuickBooks.EndpointTest do
 
     TestEndpoint.request(:get, "foo", nil, nil, options)
 
-    assert_received {:mocked_request, %{
+    assert %{
       options: ^options
-    }}
+    } = MockBackend.take_request
   end
 
   test "request/5 preserves extra headers" do
@@ -51,8 +55,8 @@ defmodule QuickBooks.EndpointTest do
 
     TestEndpoint.request(:get, "foo", nil, extra_headers)
 
-    assert_received {:mocked_request, %{
+    assert %{
       headers: [_ | ^extra_headers]
-    }}
+    } = MockBackend.take_request
   end
 end
