@@ -26,7 +26,7 @@ defmodule QuickBooks.APICase do
 
   def load_response(file) do
     %MockResponse{
-      body: File.read!("test/fixtures/#{file}") |> String.strip,
+      body: "test/fixtures/#{file}" |> File.read! |> String.strip,
       headers: [],
       status_code: 200
     }
