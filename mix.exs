@@ -15,8 +15,8 @@ defmodule ExQuickBooks.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    # Specify extra applications you'll use from Erlang/Elixir
-    [extra_applications: [:logger, :httpoison]]
+    [env: env(),
+     extra_applications: [:logger, :httpoison]]
   end
 
   # Dependencies can be Hex packages:
@@ -33,6 +33,10 @@ defmodule ExQuickBooks.Mixfile do
       {:httpoison, "~> 0.10.0"},
       {:oauther, "~> 1.1"}
     ]
+  end
+
+  defp env do
+    [backend: ExQuickBooks.HTTPoisonBackend]
   end
 
   defp elixirc_paths(:test),  do: ["lib", "test/support"]
