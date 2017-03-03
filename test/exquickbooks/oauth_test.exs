@@ -1,8 +1,8 @@
-defmodule QuickBooks.OAuthTest do
+defmodule ExQuickBooks.OAuthTest do
   use ExUnit.Case, async: false
-  use QuickBooks.APICase
+  use ExQuickBooks.APICase
 
-  alias QuickBooks.OAuth
+  alias ExQuickBooks.OAuth
 
   doctest OAuth
 

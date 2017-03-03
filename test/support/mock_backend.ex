@@ -1,9 +1,9 @@
-defmodule QuickBooks.MockBackend do
+defmodule ExQuickBooks.MockBackend do
   @moduledoc false
-  @behaviour QuickBooks.Backend
+  @behaviour ExQuickBooks.Backend
 
-  alias QuickBooks.MockRequest
-  alias QuickBooks.MockResponse
+  alias ExQuickBooks.MockRequest
+  alias ExQuickBooks.MockResponse
 
   @default_response %MockResponse{
     body: "",

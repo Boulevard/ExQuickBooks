@@ -1,4 +1,4 @@
-defmodule QuickBooks.Backend do
+defmodule ExQuickBooks.Backend do
   @moduledoc false
 
   # The request/response format is compatible with HTTPoison.

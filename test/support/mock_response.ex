@@ -1,4 +1,4 @@
-defmodule QuickBooks.MockResponse do
+defmodule ExQuickBooks.MockResponse do
   @enforce_keys ~w(
     body
     headers

@@ -1,15 +1,15 @@
-defmodule QuickBooks.OAuth do
+defmodule ExQuickBooks.OAuth do
   @moduledoc """
   QuickBooks OAuth API.
   """
 
-  alias QuickBooks.OAuthEndpoint, as: Endpoint
+  alias ExQuickBooks.OAuthEndpoint, as: Endpoint
 
   @doc """
   Retrieves a new OAuth request token.
   """
   def get_request_token do
-    options = [params: [{"oauth_callback", QuickBooks.callback_url}]]
+    options = [params: [{"oauth_callback", ExQuickBooks.callback_url}]]
 
     with {:ok, response}  <- Endpoint.post("get_request_token", "", [], options),
          {:ok, body}      <- parse_body(response),

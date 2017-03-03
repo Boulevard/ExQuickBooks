@@ -1,7 +1,7 @@
-defmodule QuickBooks.EndpointTest do
+defmodule ExQuickBooks.EndpointTest do
   use ExUnit.Case, async: false
-  alias QuickBooks.Endpoint
-  alias QuickBooks.MockBackend
+  alias ExQuickBooks.Endpoint
+  alias ExQuickBooks.MockBackend
 
   doctest Endpoint
 

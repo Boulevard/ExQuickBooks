@@ -1,4 +1,4 @@
-defmodule QuickBooks.Endpoint do
+defmodule ExQuickBooks.Endpoint do
   @moduledoc false
   @default_using_options [base_url: ""]
 
@@ -53,7 +53,7 @@ defmodule QuickBooks.Endpoint do
     new_headers = [header] ++ headers
     new_options = Keyword.put(options, :params, new_params)
 
-    QuickBooks.backend.request(method, full_url, body, new_headers, new_options)
+    backend().request(method, full_url, body, new_headers, new_options)
   end
 
   defp sign(method, url, params) do
@@ -64,7 +64,11 @@ defmodule QuickBooks.Endpoint do
   end
 
   defp credentials do
-    QuickBooks.credentials
+    ExQuickBooks.credentials
     |> OAuther.credentials
+  end
+
+  defp backend do
+    ExQuickBooks.backend
   end
 end

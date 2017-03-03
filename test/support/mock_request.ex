@@ -1,4 +1,4 @@
-defmodule QuickBooks.MockRequest do
+defmodule ExQuickBooks.MockRequest do
   @enforce_keys ~w(
     method
     url

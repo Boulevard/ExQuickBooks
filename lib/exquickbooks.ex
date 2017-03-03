@@ -1,4 +1,4 @@
-defmodule QuickBooks do
+defmodule ExQuickBooks do
   @moduledoc """
   API client for QuickBooks Online.
   """
@@ -62,14 +62,14 @@ defmodule QuickBooks do
   end
 
   defp get_env(key, default \\ nil) do
-    Application.get_env(:quickbooks, key, default)
+    Application.get_env(:exquickbooks, key, default)
   end
 
   defp raise_missing(key) do
-    raise "QuickBooks configuration value '#{key}' is required."
+    raise "ExQuickBooks configuration value '#{key}' is required."
   end
 
   defp raise_invalid(key) do
-    raise "QuickBooks configuration value '#{key}' is invalid."
+    raise "ExQuickBooks configuration value '#{key}' is invalid."
   end
 end

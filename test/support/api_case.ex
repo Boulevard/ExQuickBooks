@@ -1,12 +1,12 @@
-defmodule QuickBooks.APICase do
+defmodule ExQuickBooks.APICase do
   defmacro __using__(_) do
     quote do
       import unquote(__MODULE__)
     end
   end
 
-  alias QuickBooks.MockBackend
-  alias QuickBooks.MockResponse
+  alias ExQuickBooks.MockBackend
+  alias ExQuickBooks.MockResponse
 
   def http_200_response do
     %MockResponse{

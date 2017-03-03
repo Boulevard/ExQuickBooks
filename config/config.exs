@@ -2,8 +2,8 @@
 # and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
 
-config :quickbooks,
-  backend: QuickBooks.HTTPoisonBackend
+config :exquickbooks,
+  backend: ExQuickBooks.HTTPoisonBackend
 
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this
@@ -13,11 +13,11 @@ config :quickbooks,
 
 # You can configure for your application as:
 #
-#     config :quickbooks, key: :value
+#     config :exquickbooks, key: :value
 #
 # And access this configuration in your application as:
 #
-#     Application.get_env(:quickbooks, :key)
+#     Application.get_env(:exquickbooks, :key)
 #
 # Or configure a 3rd-party app:
 #

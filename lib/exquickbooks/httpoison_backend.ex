@@ -1,6 +1,6 @@
-defmodule QuickBooks.HTTPoisonBackend do
+defmodule ExQuickBooks.HTTPoisonBackend do
   @moduledoc false
-  @behaviour QuickBooks.Backend
+  @behaviour ExQuickBooks.Backend
 
   defdelegate request(method, url, body, headers, options), to: HTTPoison
 end
