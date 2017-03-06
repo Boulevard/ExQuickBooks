@@ -2,12 +2,15 @@
 
 [![Build Status][semaphore-badge]][semaphore]
 
-**TODO: Add description**
+**QuickBooks Online API client for Elixir.**
+
+Everything is still a work in progress. Only authentication (through OAuth 1.0)
+is supported right now.
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `exquickbooks` to your list of dependencies in `mix.exs`:
+The package can be installed by adding `exquickbooks` to your list of
+dependencies in `mix.exs`:
 
 ```elixir
 def deps do
@@ -15,9 +18,13 @@ def deps do
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/exquickbooks](https://hexdocs.pm/exquickbooks).
+The docs can be found at <https://hexdocs.pm/exquickbooks>.
+
+## Development
+
+1. Write tests.
+2. Write code. Test with `mix test`.
+3. See tests. See tests run. Run tests, run!
 
 [semaphore]: https://semaphoreci.com/boulevard/exquickbooks
 [semaphore-badge]: https://semaphoreci.com/api/v1/projects/19242d95-e2d6-4ef1-9fd3-85108a098b94/1200409/badge.svg
