@@ -50,14 +50,14 @@ defmodule ExQuickBooksTest do
     delete_env :consumer_key
     delete_env :consumer_secret
 
-    assert_raise RuntimeError, &ExQuickBooks.credentials/0
+    assert_raise ArgumentError, &ExQuickBooks.credentials/0
   end
 
   test "credentials/0 raises for invalid credentials" do
     put_env :consumer_key, 42
     put_env :consumer_secret, 42
 
-    assert_raise RuntimeError, &ExQuickBooks.credentials/0
+    assert_raise ArgumentError, &ExQuickBooks.credentials/0
   end
 
   test "{:system, ...} syntax is supported" do

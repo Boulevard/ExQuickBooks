@@ -84,10 +84,14 @@ defmodule ExQuickBooks do
   end
 
   defp raise_missing(key) do
-    raise "ExQuickBooks configuration value '#{key}' is required."
+    raise ArgumentError, message: """
+    ExQuickBooks config #{inspect(key)} is required.
+    """
   end
 
   defp raise_invalid(key, value) do
-    raise "ExQuickBooks configuration value '#{key}' is invalid, got: #{value}"
+    raise ArgumentError, message: """
+    ExQuickBooks config #{inspect(key)} is invalid, got: #{inspect(value)}
+    """
   end
 end
