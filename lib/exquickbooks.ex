@@ -31,9 +31,12 @@ defmodule ExQuickBooks do
   """
   def backend do
     case get_env(@backend_config) do
-      backend when is_atom(backend) -> backend
-      nil                           -> raise_missing(@backend_config)
-      _                             -> raise_invalid(@backend_config)
+      backend when is_atom(backend) ->
+        backend
+      nil ->
+        raise_missing(@backend_config)
+      other ->
+        raise_invalid(@backend_config, other)
     end
   end
 
@@ -42,9 +45,12 @@ defmodule ExQuickBooks do
   """
   def callback_url do
     case get_env(@callback_config) do
-      url when is_binary(url) -> url
-      nil                     -> raise_missing(@callback_config)
-      _                       -> raise_invalid(@callback_config)
+      url when is_binary(url) ->
+        url
+      nil ->
+        raise_missing(@callback_config)
+      other ->
+        raise_invalid(@callback_config, other)
     end
   end
 
@@ -54,22 +60,34 @@ defmodule ExQuickBooks do
   def credentials do
     for k <- @credential_config do
       case get_env(k) do
-        v when is_binary(v) -> {k, v}
-        nil                 -> raise_missing(k)
-        _                   -> raise_invalid(k)
+        v when is_binary(v) ->
+          {k, v}
+        nil ->
+          raise_missing(k)
+        v ->
+          raise_invalid(k, v)
       end
     end
   end
 
+  # Returns a value from the application's environment. If the value matches
+  # the {:system, ...} syntax, a system environment variable will be retrieved
+  # instead and parsed.
   defp get_env(key, default \\ nil) do
-    Application.get_env(:exquickbooks, key, default)
+    with {:system, var} <- Application.get_env(:exquickbooks, key, default) do
+      case System.get_env(var) do
+        "true"  -> true
+        "false" -> false
+         value  -> value
+      end
+    end
   end
 
   defp raise_missing(key) do
     raise "ExQuickBooks configuration value '#{key}' is required."
   end
 
-  defp raise_invalid(key) do
-    raise "ExQuickBooks configuration value '#{key}' is invalid."
+  defp raise_invalid(key, value) do
+    raise "ExQuickBooks configuration value '#{key}' is invalid, got: #{value}"
   end
 end
