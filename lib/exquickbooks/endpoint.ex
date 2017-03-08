@@ -1,74 +1,71 @@
 defmodule ExQuickBooks.Endpoint do
   @moduledoc false
+
+  alias ExQuickBooks.Request
+
   @default_using_options [base_url: ""]
 
   defmacro __using__(using_options \\ []) do
     merged_using_options = Keyword.merge(@default_using_options, using_options)
 
     quote do
-      def request(method, url, body \\ "", headers \\ [], options \\ []) do
+      import unquote(__MODULE__), only: [
+        sign_request: 1,
+        sign_request: 3,
+        send_request: 1
+      ]
+
+      @doc false
+      def request(method, url, body \\ nil, headers \\ nil, options \\ nil) do
         endpoint = unquote(__MODULE__)
-        use_options = unquote(merged_using_options)
+        base_url = unquote(merged_using_options)[:base_url]
 
-        endpoint.request(method, url, body, headers, options, use_options)
+        endpoint.request(method, base_url <> url, body, headers, options)
       end
-
-      def get(url, body \\ "", headers \\ [], options \\ []) do
-        request(:get, url, body, headers, options)
-      end
-
-      def post(url, body \\ "", headers \\ [], options \\ []) do
-        request(:post, url, body, headers, options)
-      end
-
-      def put(url, body \\ "", headers \\ [], options \\ []) do
-        request(:put, url, body, headers, options)
-      end
-
-      def patch(url, body \\ "", headers \\ [], options \\ []) do
-        request(:patch, url, body, headers, options)
-      end
-
-      def delete(url, body \\ "", headers \\ [], options \\ []) do
-        request(:delete, url, body, headers, options)
-      end
-
-      def head(url, body \\ "", headers \\ [], options \\ []) do
-        request(:head, url, body, headers, options)
-      end
-
-      def options(url, body \\ "", headers \\ [], options \\ []) do
-        request(:options, url, body, headers, options)
-      end
-
-      defoverridable Module.definitions_in(__MODULE__)
     end
   end
 
-  def request(method, url, body, headers, options, use_options) do
-    full_url = use_options[:base_url] <> url
-
-    {header, new_params} = sign(method, full_url, options[:params] || [])
-
-    new_headers = [header] ++ headers
-    new_options = Keyword.put(options, :params, new_params)
-
-    backend().request(method, full_url, body, new_headers, new_options)
+  def request(method, url, body, headers, options) do
+    %Request{
+      method: method,
+      url: url,
+      body: body || "",
+      headers: headers || [],
+      options: options || []
+    }
   end
 
-  defp sign(method, url, params) do
-    method
-    |> to_string
-    |> OAuther.sign(url, params, credentials())
-    |> OAuther.header
+  def sign_request(request) do
+    credentials =
+      ExQuickBooks.credentials
+      |> OAuther.credentials
+
+    sign_request(request, credentials)
   end
 
-  defp credentials do
-    ExQuickBooks.credentials
-    |> OAuther.credentials
+  def sign_request(request = %Request{}, token, token_secret) do
+    credentials =
+      ExQuickBooks.credentials
+      |> Keyword.merge([token: token, token_secret: token_secret])
+      |> OAuther.credentials
+
+    sign_request(request, credentials)
   end
 
-  defp backend do
-    ExQuickBooks.backend
+  def send_request(request = %Request{}) do
+    ExQuickBooks.backend.request(request)
+  end
+
+  defp sign_request(request = %Request{}, credentials) do
+    {header, new_params} =
+      request.method
+      |> to_string
+      |> OAuther.sign(request.url, request.options[:params] || [], credentials)
+      |> OAuther.header
+
+    new_headers = [header] ++ request.headers
+    new_options = Keyword.put(request.options, :params, new_params)
+
+    %{request | headers: new_headers, options: new_options}
   end
 end

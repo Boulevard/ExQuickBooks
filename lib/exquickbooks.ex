@@ -6,11 +6,13 @@ defmodule ExQuickBooks do
 
   You can configure the application through `Mix.Config`:
 
-      config :exquickbooks,
-        callback_url: "http://example.com/callback",
-        consumer_key: "key",
-        consumer_secret: "secret",
-        use_production_api: true
+  ```
+  config :exquickbooks,
+    callback_url: "http://example.com/callback",
+    consumer_key: "key",
+    consumer_secret: "secret",
+    use_production_api: true
+  ```
 
   ### Accepted configuration keys
 
@@ -37,9 +39,11 @@ defmodule ExQuickBooks do
   If you store configuration in the system’s environment variables, you can
   have ExQuickBooks read them at runtime:
 
-      config :exquickbooks,
-        consumer_key: {:system, "EXQUICKBOOKS_KEY"},
-        consumer_secret: {:system, "EXQUICKBOOKS_SECRET"}
+  ```
+  config :exquickbooks,
+    consumer_key: {:system, "EXQUICKBOOKS_KEY"},
+    consumer_secret: {:system, "EXQUICKBOOKS_SECRET"}
+  ```
 
   This syntax works for binary and boolean values. Booleans are parsed from
   `"true"` and `"false"`, otherwise the binary is used as is.

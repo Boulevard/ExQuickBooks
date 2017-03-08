@@ -6,10 +6,10 @@ defmodule ExQuickBooks.APICase do
   end
 
   alias ExQuickBooks.MockBackend
-  alias ExQuickBooks.MockResponse
+  alias HTTPoison.Response
 
   def http_200_response do
-    %MockResponse{
+    %Response{
       body: "",
       headers: [],
       status_code: 200
@@ -17,7 +17,7 @@ defmodule ExQuickBooks.APICase do
   end
 
   def http_400_response do
-    %MockResponse{
+    %Response{
       body: "400 Bad Request",
       headers: [],
       status_code: 400
@@ -25,7 +25,7 @@ defmodule ExQuickBooks.APICase do
   end
 
   def load_response(file) do
-    %MockResponse{
+    %Response{
       body: "test/fixtures/#{file}" |> File.read! |> String.strip,
       headers: [],
       status_code: 200

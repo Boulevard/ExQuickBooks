@@ -2,52 +2,41 @@ defmodule ExQuickBooks.MockBackend do
   @moduledoc false
   @behaviour ExQuickBooks.Backend
 
-  alias ExQuickBooks.MockRequest
-  alias ExQuickBooks.MockResponse
+  alias ExQuickBooks.Request
+  alias HTTPoison.Response
 
-  @default_response %MockResponse{
+  @default_response %Response{
     body: "",
     headers: [],
     status_code: 200
   }
 
-  def request(method, url, body, headers, options) do
-    %MockRequest{
-      method: method,
-      url: url,
-      body: body,
-      headers: headers,
-      options: options
-    } |> send_request()
-
-    {:ok, take_response() |> convert_mock_response()}
+  def request(request = %Request{}) do
+    send_request(request)
+    {:ok, take_response()}
   end
 
   def take_request(timeout \\ 0) do
     receive do
-      request = %MockRequest{} -> request
+      {__MODULE__, request = %Request{}} -> request
     after
       timeout -> nil
     end
   end
 
-  def send_response(response = %MockResponse{}) do
-    send self(), response
+  def send_response(response = %Response{}) do
+    send self(), {__MODULE__, response}
   end
 
   defp take_response(timeout \\ 0) do
     receive do
-      response = %MockResponse{} -> response
+      {__MODULE__, response = %Response{}} -> response
     after
       timeout -> @default_response
     end
   end
 
-  defp send_request(request = %MockRequest{}) do
-    send self(), request
-  end
-
-  defp convert_mock_response(response = %MockResponse{}) do
-    struct!(HTTPoison.Response, response |> Map.from_struct)
+  defp send_request(request = %Request{}) do
+    send self(), {__MODULE__, request}
   end
 end
