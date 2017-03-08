@@ -29,4 +29,26 @@ defmodule ExQuickBooks.OAuthTest do
     http_400_response() |> send_response
     assert {:error, _} = OAuth.get_request_token
   end
+
+  test "get_access_token/3 returns token" do
+    load_response("oauth/get_access_token") |> send_response
+
+    assert OAuth.get_access_token("token", "secret", "verifier") ==
+      {:ok,
+        %{"oauth_token" => "token",
+          "oauth_token_secret" => "secret"}}
+  end
+
+  test "get_access_token/3 recovers when there's an OAuth problem" do
+    load_response("oauth/get_access_token_problem") |> send_response
+
+    assert OAuth.get_access_token("token", "secret", "verifier") ==
+      {:error,
+        %{"oauth_problem" => "signature_invalid"}}
+  end
+
+  test "get_access_token/3 recovers when there's some other error" do
+    http_400_response() |> send_response
+    assert {:error, _} = OAuth.get_access_token("token", "secret", "verifier")
+  end
 end
