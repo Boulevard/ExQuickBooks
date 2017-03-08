@@ -1,6 +1,48 @@
 defmodule ExQuickBooks do
   @moduledoc """
   API client for QuickBooks Online.
+
+  ## Configuration
+
+  You can configure the application through `Mix.Config`:
+
+      config :exquickbooks,
+        callback_url: "http://example.com/callback",
+        consumer_key: "key",
+        consumer_secret: "secret",
+        use_production_api: true
+
+  ### Accepted configuration keys
+
+  #### `:callback_url`
+
+  Required. An absolute URL where the user is redirected after authorising your
+  application. See the documentation for `ExQuickBooks.OAuth` for more details.
+
+  #### `:consumer_key`, `:consumer_secret`
+
+  Required. OAuth consumer credentials which you can get for your application
+  at <https://developer.intuit.com/getstarted>.
+
+  Please note that there are different credentials for the sandbox and
+  production APIs.
+
+  #### `:use_production_api`
+
+  Optional, `false` by default. Set to `false` to use the QuickBooks Sandbox,
+  `true` to connect to the production APIs.
+
+  ### Reading environment variables
+
+  If you store configuration in the system’s environment variables, you can
+  have ExQuickBooks read them at runtime:
+
+      config :exquickbooks,
+        consumer_key: {:system, "EXQUICKBOOKS_KEY"},
+        consumer_secret: {:system, "EXQUICKBOOKS_SECRET"}
+
+  This syntax works for binary and boolean values. Booleans are parsed from
+  `"true"` and `"false"`, otherwise the binary is used as is.
   """
 
   @backend_config :backend
@@ -8,16 +50,14 @@ defmodule ExQuickBooks do
   @credential_config [:consumer_key, :consumer_secret]
   @use_production_api_config :use_production_api
 
-  @doc """
-  Returns the Intuit OAuth API URL.
-  """
+  # Returns the Intuit OAuth API URL.
+  @doc false
   def oauth_api do
     "https://oauth.intuit.com/oauth/v1/"
   end
 
-  @doc """
-  Returns the QuickBooks Accounting API URL.
-  """
+  # Returns the QuickBooks Accounting API URL.
+  @doc false
   def accounting_api do
     if get_env(@use_production_api_config, false) do
       "https://quickbooks.api.intuit.com/v3/"
@@ -26,9 +66,8 @@ defmodule ExQuickBooks do
     end
   end
 
-  @doc """
-  Returns the configured HTTP backend.
-  """
+  # Returns the configured HTTP backend.
+  @doc false
   def backend do
     case get_env(@backend_config) do
       backend when is_atom(backend) ->
@@ -40,9 +79,8 @@ defmodule ExQuickBooks do
     end
   end
 
-  @doc """
-  Returns the configured OAuth callback URL.
-  """
+  # Returns the configured OAuth callback URL.
+  @doc false
   def callback_url do
     case get_env(@callback_config) do
       url when is_binary(url) ->
@@ -54,9 +92,8 @@ defmodule ExQuickBooks do
     end
   end
 
-  @doc """
-  Returns the configured OAuth credentials.
-  """
+  # Returns the configured OAuth credentials.
+  @doc false
   def credentials do
     for k <- @credential_config do
       case get_env(k) do

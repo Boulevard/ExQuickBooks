@@ -5,12 +5,20 @@ defmodule ExQuickBooks.Mixfile do
     [app: :exquickbooks,
      version: "0.2.0",
      elixir: "~> 1.4",
-     description: description(),
-     package: package(),
-     deps: deps(),
+
+     # Compilation
      elixirc_paths: elixirc_paths(Mix.env),
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
+
+     # Packaging
+     name: "ExQuickBooks",
+     description: description(),
+     package: package(),
+     deps: deps(),
+     docs: docs(),
+
+     # Test coverage
      test_coverage: [tool: ExCoveralls],
      preferred_cli_env: [coveralls: :test]]
   end
@@ -37,6 +45,10 @@ defmodule ExQuickBooks.Mixfile do
     [licenses: ["ISC"],
      maintainers: ["Boulevard Labs, Inc."],
      links: %{"GitHub" => "https://github.com/Boulevard/ExQuickBooks"}]
+  end
+
+  defp docs do
+    [main: ExQuickBooks]
   end
 
   # Dependencies can be Hex packages:
