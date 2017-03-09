@@ -4,6 +4,7 @@ defmodule ExQuickBooks.EndpointTest do
   use ExQuickBooks.Endpoint, base_url: "http://localhost/"
 
   alias ExQuickBooks.Request
+  alias ExQuickBooks.Token
 
   doctest ExQuickBooks.Endpoint
 
@@ -21,9 +22,11 @@ defmodule ExQuickBooks.EndpointTest do
   end
 
   test "sign_request/3 signs with consumer credentials and the token" do
+    token = %Token{token: "token", token_secret: "secret"}
+
     assert %Request{
       headers: [{"Authorization", "OAuth " <> authorization}]
-    } = request(:get, "foo") |> sign_request("token", "secret")
+    } = request(:get, "foo") |> sign_request(token)
 
     assert String.contains?(authorization, "oauth_consumer_key")
     assert String.contains?(authorization, "oauth_token")

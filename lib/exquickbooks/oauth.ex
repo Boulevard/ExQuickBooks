@@ -9,23 +9,21 @@ defmodule ExQuickBooks.OAuth do
   ## Request token
 
   To start the authentication flow, your application needs to get a request
-  token and secret using `get_request_token/0`:
+  token using `get_request_token/0`:
 
   ```
-  {:ok,
-   %{"oauth_token" => request_token,
-     "oauth_token_secret" => request_token_secret},
-   redirect_url} = ExQuickBooks.get_request_token
+  {:ok, request_token, redirect_url} = ExQuickBooks.get_request_token
   ```
 
-  That function will also give you the URL where you should redirect the user
-  to authorise your application to access their QuickBooks data. After that
-  step they will be redirected to the `:callback_url` you’ve set in the
-  configuration.
+  The token is an `ExQuickBooks.Token`, see its documentation for more details.
 
-  If you need to persist data (such as the request token and secret) between
-  this request and the callback, you could store that data e.g. in the current
-  user’s (encrypted!) session.
+  You will also receive a URL where you should redirect the user to authorise
+  your application to access their QuickBooks data. After that step they are
+  redirected to the `:callback_url` you’ve set in the configuration.
+
+  If you need to persist data (such as the request token) between this request
+  and the callback, you could store that data e.g. in the current user’s
+  (encrypted) session.
 
   ## Callback
 
@@ -35,87 +33,71 @@ defmodule ExQuickBooks.OAuth do
   - `"realmId"` -
     ID of the user’s QuickBooks realm. Note the camel-cased name.
   - `"oauth_verifier"` -
-    Verification string you can use to retrieve access credentials.
+    Token verifier string you can use to retrieve an access token.
+
+  There are more parameters as well, but these are most relevant.
 
   ## Access token
 
-  You can pass the verifier with the previous request token to
-  `get_access_token/3` in order to retrieve an access token and secret:
+  You can now exchange the request token and the verifier from the callback
+  request parameters for an access token using `get_access_token/2`:
 
   ```
-  {:ok,
-   %{"oauth_token" => access_token,
-     "oauth_token_secret" => access_token_secret}} =
-   ExQuickBooks.get_access_token(request_token, request_token_secret, verifier)
+  {:ok, access_token} = ExQuickBooks.get_access_token(request_token, verifier)
   ```
 
-  Your application should now store the realm ID, access token, and secret. Use
-  them in API calls to authenticate on behalf of the user.
+  The token is an `ExQuickBooks.Token`, see its documentation for more details.
+
+  Now you should store the realm ID and access token. Use them in API calls to
+  authenticate on behalf of the user.
   """
 
   use ExQuickBooks.Endpoint, base_url: ExQuickBooks.oauth_api
 
-  @type response_body :: %{required(String.t) => String.t}
+  alias ExQuickBooks.Token
 
   @doc """
-  Retrieves a new OAuth request token.
+  Retrieves a new request token.
 
-  Returns the token response and a URL where your application should redirect
-  the user.
-
-  The response body contains the following keys:
-
-  - `"oauth_token"` -
-    The request token associated with the user.
-  - `"oauth_token_secret"` -
-    The request token secret associated with the user.
-
-  Note that the redirect URL is prepopulated with the request token.
+  Returns the request token and a URL where your application should redirect
+  the user. Note that the redirect URL is already prepopulated with the request
+  token.
   """
-  @spec get_request_token :: {:ok, response_body, String.t} | {:error, any}
+  @spec get_request_token :: {:ok, Token.t, String.t} | {:error, any}
   def get_request_token do
     result =
       request(:post, "get_request_token", nil, nil, params: [
         {"oauth_callback", ExQuickBooks.callback_url}
       ])
-      |> sign_request()
+      |> sign_request
       |> send_request
 
     with {:ok, response}  <- result,
          {:ok, body}      <- parse_body(response),
-         {:ok, body}      <- parse_token_response(body),
-     do: {:ok, body, redirect_url(body)}
+         {:ok, token}     <- parse_token(body),
+     do: {:ok, token, redirect_url(token)}
   end
 
   @doc """
-  Exchanges an authorised request token and a token verifier for an access
-  token. The secret is used for signing the request.
+  Exchanges a request token and a token verifier for an access token.
 
-  The token verifier required with this call was returned previously with the
-  callback URL params.
-
-  The response body contains the following keys:
-
-  - `"oauth_token"` -
-    The access token associated with the user.
-  - `"oauth_token_secret"` -
-    The access token secret associated with the user.
+  You should have previously received the token verifier in the callback URL
+  params as `"oauth_verifier"`.
   """
-  @spec get_access_token(String.t, String.t, String.t) ::
-    {:ok, response_body} | {:error, any}
-  def get_access_token(request_token, request_token_secret, verifier) do
+  @spec get_access_token(Token.t, String.t) :: {:ok, Token.t} | {:error, any}
+  def get_access_token(request_token = %Token{}, verifier) do
     result =
       request(:post, "get_access_token", nil, nil, params: [
-        {"oauth_token", request_token},
+        {"oauth_token", request_token.token},
         {"oauth_verifier", verifier}
       ])
-      |> sign_request(request_token, request_token_secret)
+      |> sign_request(request_token)
       |> send_request
 
     with {:ok, response}  <- result,
          {:ok, body}      <- parse_body(response),
-         {:ok, body}      <- parse_token_response(body),
-     do: {:ok, body}
+         {:ok, token}     <- parse_token(body),
+     do: {:ok, token}
   end
 
   defp parse_body(%{body: body}) when is_binary(body) do
@@ -125,17 +107,17 @@ defmodule ExQuickBooks.OAuth do
     {:error, "Response body was malformed."}
   end
 
-  defp parse_token_response(body = %{"oauth_token" => _}) do
-    {:ok, body}
+  defp parse_token(%{"oauth_token" => token, "oauth_token_secret" => secret}) do
+    {:ok, %Token{token: token, token_secret: secret}}
   end
-  defp parse_token_response(body = %{"oauth_problem" => _}) do
+  defp parse_token(body = %{"oauth_problem" => _}) do
     {:error, body}
   end
-  defp parse_token_response(_) do
+  defp parse_token(_) do
     {:error, "Response body did not contain oauth_token or oauth_problem."}
   end
 
-  defp redirect_url(%{"oauth_token" => token}) do
+  defp redirect_url(%Token{token: token}) do
     "https://appcenter.intuit.com/Connect/Begin?oauth_token=#{token}"
   end
 end

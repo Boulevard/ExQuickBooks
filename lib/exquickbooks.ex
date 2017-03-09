@@ -99,7 +99,7 @@ defmodule ExQuickBooks do
   # Returns the configured OAuth credentials.
   @doc false
   def credentials do
-    for k <- @credential_config do
+    for k <- @credential_config, into: %{} do
       case get_env(k) do
         v when is_binary(v) ->
           {k, v}
