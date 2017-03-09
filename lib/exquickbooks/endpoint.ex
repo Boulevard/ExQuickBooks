@@ -11,7 +11,7 @@ defmodule ExQuickBooks.Endpoint do
     quote do
       import unquote(__MODULE__), only: [
         sign_request: 1,
-        sign_request: 3,
+        sign_request: 2,
         send_request: 1
       ]
 
@@ -35,28 +35,14 @@ defmodule ExQuickBooks.Endpoint do
     }
   end
 
-  def sign_request(request) do
+  def sign_request(request = %Request{}, token \\ %{}) do
     credentials =
-      ExQuickBooks.credentials
+      token
+      |> Map.delete(:__struct__)
+      |> Map.merge(ExQuickBooks.credentials)
+      |> Map.to_list
       |> OAuther.credentials
 
-    sign_request(request, credentials)
-  end
-
-  def sign_request(request = %Request{}, token, token_secret) do
-    credentials =
-      ExQuickBooks.credentials
-      |> Keyword.merge([token: token, token_secret: token_secret])
-      |> OAuther.credentials
-
-    sign_request(request, credentials)
-  end
-
-  def send_request(request = %Request{}) do
-    ExQuickBooks.backend.request(request)
-  end
-
-  defp sign_request(request = %Request{}, credentials) do
     {header, new_params} =
       request.method
       |> to_string
@@ -67,5 +53,9 @@ defmodule ExQuickBooks.Endpoint do
     new_options = Keyword.put(request.options, :params, new_params)
 
     %{request | headers: new_headers, options: new_options}
+  end
+
+  def send_request(request = %Request{}) do
+    ExQuickBooks.backend.request(request)
   end
 end

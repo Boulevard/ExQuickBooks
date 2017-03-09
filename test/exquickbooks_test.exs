@@ -40,10 +40,10 @@ defmodule ExQuickBooksTest do
     put_env :consumer_key, "key"
     put_env :consumer_secret, "secret"
 
-    assert ExQuickBooks.credentials == [
+    assert ExQuickBooks.credentials == %{
       consumer_key: "key",
       consumer_secret: "secret"
-    ]
+    }
   end
 
   test "credentials/0 raises for missing credentials" do
@@ -71,10 +71,10 @@ defmodule ExQuickBooksTest do
     put_env :consumer_secret, {:system, "EXQUICKBOOKS_SECRET"}
     put_env :use_production_api, {:system, "EXQUICKBOOKS_USE_PRODUCTION_API"}
 
-    assert ExQuickBooks.credentials == [
+    assert ExQuickBooks.credentials == %{
       consumer_key: "system_key",
       consumer_secret: "system_secret"
-    ]
+    }
 
     # Production config flag should be parsed as a boolean
     refute ExQuickBooks.accounting_api |> String.contains?("sandbox")
