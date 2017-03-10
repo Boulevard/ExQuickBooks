@@ -17,22 +17,17 @@ defmodule ExQuickBooks.Endpoint do
 
       @doc false
       def request(method, url, body \\ nil, headers \\ nil, options \\ nil) do
-        endpoint = unquote(__MODULE__)
         base_url = unquote(merged_using_options)[:base_url]
 
-        endpoint.request(method, base_url <> url, body, headers, options)
+        %Request{
+          method: method,
+          url: base_url <> url,
+          body: body || "",
+          headers: headers || [],
+          options: options || []
+        }
       end
     end
-  end
-
-  def request(method, url, body, headers, options) do
-    %Request{
-      method: method,
-      url: url,
-      body: body || "",
-      headers: headers || [],
-      options: options || []
-    }
   end
 
   def sign_request(request = %Request{}, token \\ %{}) do
