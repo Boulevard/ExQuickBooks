@@ -63,7 +63,8 @@ defmodule ExQuickBooks.Mixfile do
   defp deps do
     [{:httpoison, "~> 0.11"},
      {:oauther, "~> 1.1"},
-     {:ex_doc, "~> 0.14", only: :dev},
+     {:poison, "~> 3.1"},
+     {:ex_doc, "~> 0.15", only: :dev, runtime: false},
      {:excoveralls, "~> 0.6", only: :test}]
   end
 
