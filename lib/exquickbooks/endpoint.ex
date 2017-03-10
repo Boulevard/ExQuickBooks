@@ -44,7 +44,7 @@ defmodule ExQuickBooks.Endpoint do
       |> OAuther.sign(request.url, request.options[:params] || [], credentials)
       |> OAuther.header
 
-    new_headers = [header] ++ request.headers
+    new_headers = merge_headers(request.headers, [header])
     new_options = Keyword.put(request.options, :params, new_params)
 
     %{request | headers: new_headers, options: new_options}
@@ -52,5 +52,11 @@ defmodule ExQuickBooks.Endpoint do
 
   def send_request(request = %Request{}) do
     ExQuickBooks.backend.request(request)
+  end
+
+  def merge_headers(left, right) do
+    # Enum.uniq_by takes the first element and discards the rest; we need to
+    # preserve headers on the right side.
+    Enum.uniq_by(right ++ left, fn {k, _} -> k end)
   end
 end
