@@ -17,7 +17,7 @@ defmodule ExQuickBooks.JSONEndpoint do
         send_json_request: 1
       ]
 
-      @type json :: %{required(String.t) => String.t}
+      @type json_map :: %{required(String.t) => any}
     end
   end
 
