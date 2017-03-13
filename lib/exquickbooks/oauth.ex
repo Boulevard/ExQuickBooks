@@ -1,6 +1,6 @@
 defmodule ExQuickBooks.OAuth do
   @moduledoc """
-  Authentication functions for OAuth 1.0a.
+  Functions for interacting with the OAuth API.
 
   QuickBooks uses the three-legged OAuth 1.0a flow. For a human-readable
   overview of the whole flow and how to implement it, see e.g.

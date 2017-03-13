@@ -25,13 +25,27 @@ defmodule ExQuickBooks.APICase do
   end
 
   def load_response(file) do
+    body =
+      "test/fixtures/#{file}"
+      |> File.read!
+      |> String.strip
+
+    content_type =
+      file
+      |> String.split(".")
+      |> List.last
+      |> type_for_extension
+
     %Response{
-      body: "test/fixtures/#{file}" |> File.read! |> String.strip,
-      headers: [],
+      body: body,
+      headers: [{"Content-Type", content_type}],
       status_code: 200
     }
   end
 
   defdelegate take_request, to: MockBackend
   defdelegate send_response(response), to: MockBackend
+
+  defp type_for_extension("json"),  do: "application/json"
+  defp type_for_extension(_),       do: "text/plain"
 end
