@@ -6,6 +6,9 @@ defmodule ExQuickBooks.JSONEndpoint do
     send_request: 1
   ]
 
+  alias ExQuickBooks.Request
+  alias HTTPoison.Response
+
   @json_headers [
     {"Accept", "application/json"},
     {"Content-Type", "application/json"}
@@ -21,12 +24,41 @@ defmodule ExQuickBooks.JSONEndpoint do
     end
   end
 
-  def send_json_request(request) do
+  def send_json_request(request = %Request{}) do
+    new_body = encode_body(request.body)
     new_headers = merge_headers(@json_headers, request.headers)
-    new_request = %{request | headers: new_headers}
 
-    with {:ok, response} <- send_request(new_request) do
-      Poison.Parser.parse(response.body)
+    %{request | body: new_body, headers: new_headers}
+    |> send_request
+    |> parse_response
+  end
+
+  defp encode_body(body) when is_binary(body) do
+    body
+  end
+  defp encode_body(body) do
+    Poison.Encoder.encode(body, [])
+  end
+
+  defp parse_response({ok_error, response = %Response{}}) do
+    is_json =
+      response
+      |> parse_content_type
+      |> String.starts_with?("application/json")
+
+    if is_json do
+      {ok_error, Poison.Parser.parse!(response.body)}
+    else
+      {ok_error, response}
     end
+  end
+  defp parse_response(non_response_result) do
+    non_response_result
+  end
+
+  defp parse_content_type(%Response{headers: headers}) do
+    Enum.find_value(headers, "text/plain", fn({header, value}) ->
+      if String.downcase(header) == "content-type", do: value
+    end)
   end
 end
