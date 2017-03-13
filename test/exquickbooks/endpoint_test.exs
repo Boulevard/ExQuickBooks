@@ -39,4 +39,14 @@ defmodule ExQuickBooks.EndpointTest do
 
     assert take_request() == request
   end
+
+  test "send_request/1 returns :ok for 2xx statuses" do
+    http_200_response() |> send_response
+    assert {:ok, _} = request(:get, "foo") |> send_request
+  end
+
+  test "send_request/1 returns :error for non-2xx statuses" do
+    http_400_response() |> send_response
+    assert {:error, _} = request(:get, "foo") |> send_request
+  end
 end

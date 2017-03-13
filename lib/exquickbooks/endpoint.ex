@@ -2,6 +2,7 @@ defmodule ExQuickBooks.Endpoint do
   @moduledoc false
 
   alias ExQuickBooks.Request
+  alias HTTPoison.Response
 
   @default_using_options [base_url: ""]
 
@@ -51,12 +52,21 @@ defmodule ExQuickBooks.Endpoint do
   end
 
   def send_request(request = %Request{}) do
-    ExQuickBooks.backend.request(request)
+    with {:ok, response} <- ExQuickBooks.backend.request(request) do
+      parse_status(response)
+    end
   end
 
   def merge_headers(left, right) do
     # Enum.uniq_by takes the first element and discards the rest; we need to
     # preserve headers on the right side.
     Enum.uniq_by(right ++ left, fn {k, _} -> k end)
+  end
+
+  defp parse_status(response = %Response{status_code: c}) when c in 200..299 do
+    {:ok, response}
+  end
+  defp parse_status(response = %Response{}) do
+    {:error, response}
   end
 end
