@@ -3,8 +3,8 @@ defmodule ExQuickBooks.EndpointTest do
   use ExQuickBooks.APICase
   use ExQuickBooks.Endpoint, base_url: "http://localhost/"
 
+  alias ExQuickBooks.AccessToken
   alias ExQuickBooks.Request
-  alias ExQuickBooks.Token
 
   doctest ExQuickBooks.Endpoint
 
@@ -21,8 +21,12 @@ defmodule ExQuickBooks.EndpointTest do
     refute String.contains?(authorization, "oauth_token")
   end
 
-  test "sign_request/3 signs with consumer credentials and the token" do
-    token = %Token{token: "token", token_secret: "secret"}
+  test "sign_request/2 signs with consumer credentials and an access token" do
+    token = %AccessToken{
+      token: "token",
+      token_secret: "secret",
+      realm_id: "realm_id"
+    }
 
     assert %Request{
       headers: [{"Authorization", "OAuth " <> authorization}]

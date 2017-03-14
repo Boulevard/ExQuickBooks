@@ -34,7 +34,7 @@ defmodule ExQuickBooks.Endpoint do
   def sign_request(request = %Request{}, token \\ %{}) do
     credentials =
       token
-      |> Map.delete(:__struct__)
+      |> Map.take([:token, :token_secret])
       |> Map.merge(ExQuickBooks.credentials)
       |> Map.to_list
       |> OAuther.credentials

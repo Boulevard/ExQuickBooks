@@ -9,7 +9,7 @@ defmodule ExQuickBooks.Item do
   use ExQuickBooks.Endpoint, base_url: ExQuickBooks.accounting_api
   use ExQuickBooks.JSONEndpoint
 
-  alias ExQuickBooks.Token
+  alias ExQuickBooks.AccessToken
 
   @doc """
   Creates an item.
@@ -17,10 +17,10 @@ defmodule ExQuickBooks.Item do
   The item name must be unique. Sales items must define `IncomeAccountRef`.
   Purchase items must define `ExpenseAccountRef`.
   """
-  @spec create_item(Token.t, String.t, json_map) ::
+  @spec create_item(AccessToken.t, json_map) ::
     {:ok, json_map} | {:error, any}
-  def create_item(token, realm_id, item) do
-    request(:post, "company/#{realm_id}/item", item)
+  def create_item(token, item) do
+    request(:post, "company/#{token.realm_id}/item", item)
     |> sign_request(token)
     |> send_json_request
   end
@@ -28,10 +28,10 @@ defmodule ExQuickBooks.Item do
   @doc """
   Retrieves an item.
   """
-  @spec read_item(Token.t, String.t, String.t) ::
+  @spec read_item(AccessToken.t, String.t) ::
     {:ok, json_map} | {:error, any}
-  def read_item(token, realm_id, item_id) do
-    request(:get, "company/#{realm_id}/item/#{item_id}")
+  def read_item(token, item_id) do
+    request(:get, "company/#{token.realm_id}/item/#{item_id}")
     |> sign_request(token)
     |> send_json_request
   end
@@ -43,10 +43,10 @@ defmodule ExQuickBooks.Item do
   `read_item/3`, otherwise the omitted values are set to their default values
   or NULL.
   """
-  @spec update_item(Token.t, String.t, json_map) ::
+  @spec update_item(AccessToken.t, json_map) ::
     {:ok, json_map} | {:error, any}
-  def update_item(token, realm_id, item) do
-    request(:post, "company/#{realm_id}/item", item)
+  def update_item(token, item) do
+    request(:post, "company/#{token.realm_id}/item", item)
     |> sign_request(token)
     |> send_json_request
   end
