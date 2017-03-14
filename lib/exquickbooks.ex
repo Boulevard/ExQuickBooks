@@ -8,18 +8,12 @@ defmodule ExQuickBooks do
 
   ```
   config :exquickbooks,
-    callback_url: "http://example.com/callback",
     consumer_key: "key",
     consumer_secret: "secret",
     use_production_api: true
   ```
 
   ### Accepted configuration keys
-
-  #### `:callback_url`
-
-  Required. An absolute URL where the user is redirected after authorising your
-  application. See the documentation for `ExQuickBooks.OAuth` for more details.
 
   #### `:consumer_key`, `:consumer_secret`
 
@@ -50,7 +44,6 @@ defmodule ExQuickBooks do
   """
 
   @backend_config :backend
-  @callback_config :callback_url
   @credential_config [:consumer_key, :consumer_secret]
   @use_production_api_config :use_production_api
 
@@ -80,19 +73,6 @@ defmodule ExQuickBooks do
         raise_missing(@backend_config)
       other ->
         raise_invalid(@backend_config, other)
-    end
-  end
-
-  # Returns the configured OAuth callback URL.
-  @doc false
-  def callback_url do
-    case get_env(@callback_config) do
-      url when is_binary(url) ->
-        url
-      nil ->
-        raise_missing(@callback_config)
-      other ->
-        raise_invalid(@callback_config, other)
     end
   end
 
