@@ -20,21 +20,25 @@ defmodule ExQuickBooks.OAuthTest do
     realm_id: "realm_id"
   }
 
-  test "get_request_token/0 returns a request token" do
+  test "get_request_token/1 returns a request token" do
     load_response("oauth/get_request_token") |> send_response
-    assert OAuth.get_request_token == {:ok, @request_token}
+
+    assert OAuth.get_request_token("http://example.com") ==
+      {:ok, @request_token}
   end
 
-  test "get_request_token/0 recovers when there's an OAuth problem" do
+  test "get_request_token/1 recovers when there's an OAuth problem" do
     load_response("oauth/get_request_token_problem") |> send_response
 
-    assert OAuth.get_request_token ==
+    assert OAuth.get_request_token("http://example.com") ==
       {:error, %{"oauth_problem" => "signature_invalid"}}
   end
 
-  test "get_request_token/0 recovers when there's some other error" do
+  test "get_request_token/1 recovers when there's some other error" do
     http_400_response() |> send_response
-    assert {:error, _} = OAuth.get_request_token
+
+    assert {:error, _} =
+      OAuth.get_request_token("http://example.com")
   end
 
   test "get_access_token/3 returns an access token" do

@@ -9,10 +9,10 @@ defmodule ExQuickBooks.OAuth do
   ## Request token
 
   To start the authentication flow, your application needs to get a request
-  token using `get_request_token/0`:
+  token using `get_request_token/1`:
 
   ```
-  {:ok, request_token} = ExQuickBooks.get_request_token
+  {:ok, request_token} = ExQuickBooks.get_request_token(callback_url)
   ```
 
   The token is an `ExQuickBooks.RequestToken`, see its documentation for more
@@ -20,7 +20,7 @@ defmodule ExQuickBooks.OAuth do
 
   You should redirect the user to `request_token.redirect_url` to authorise
   your application to access their QuickBooks data. After that step they are
-  redirected to the `:callback_url` you’ve set in the configuration.
+  redirected to the given callback URL.
 
   If you need to persist data (such as the request token) between this request
   and the callback, you could store that data e.g. in the current user’s
@@ -60,15 +60,18 @@ defmodule ExQuickBooks.OAuth do
   @doc """
   Retrieves a new request token.
 
+  The callback URL must be an absolute URL where the user is redirected after
+  authorising your application.
+
   Returns the request token with a URL where your application should redirect
   the user as `request_token.redirect_url`.
   """
-  @spec get_request_token ::
+  @spec get_request_token(String.t) ::
     {:ok, RequestToken.t} | {:error, any}
-  def get_request_token do
+  def get_request_token(callback_url) do
     result =
       request(:post, "get_request_token", nil, nil, params: [
-        {"oauth_callback", ExQuickBooks.callback_url}
+        {"oauth_callback", callback_url}
       ])
       |> sign_request
       |> send_request
