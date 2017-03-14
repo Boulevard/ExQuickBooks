@@ -9,9 +9,9 @@ defmodule ExQuickBooks.RequestToken do
   The token is technically a public/private key pair:
 
   - `:token` -
-    The public key binary.
+    The public key string.
   - `:token_secret` -
-    The private key binary.
+    The private key string.
   - `:redirect_url` -
     URL where you should redirect the user to continue authentication.
 
@@ -25,9 +25,9 @@ defmodule ExQuickBooks.RequestToken do
   """
 
   @type t :: %__MODULE__{
-    token: binary,
-    token_secret: binary,
-    redirect_url: binary
+    token: String.t,
+    token_secret: String.t,
+    redirect_url: String.t
   }
 
   @enforce_keys [

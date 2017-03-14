@@ -9,9 +9,9 @@ defmodule ExQuickBooks.AccessToken do
   The token is technically a public/private key pair:
 
   - `:token` -
-    The public key binary.
+    The public key string.
   - `:token_secret` -
-    The private key binary.
+    The private key string.
   - `:realm_id` -
     ID of the Realm this token is associated with.
 
@@ -25,9 +25,9 @@ defmodule ExQuickBooks.AccessToken do
   """
 
   @type t :: %__MODULE__{
-    token: binary,
-    token_secret: binary,
-    realm_id: binary
+    token: String.t,
+    token_secret: String.t,
+    realm_id: String.t
   }
 
   @enforce_keys [
