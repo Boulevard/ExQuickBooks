@@ -4,8 +4,11 @@
 
 **QuickBooks Online API client for Elixir.**
 
-Everything is still a work in progress. Only authentication (through OAuth 1.0)
-is supported right now.
+Everything is still a work in progress. Currently only these APIs are supported:
+
+- Item
+- OAuth
+- Preferences
 
 ## Installation
 
@@ -14,7 +17,7 @@ dependencies in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:exquickbooks, "~> 0.3.0"}]
+  [{:exquickbooks, "~> 0.4.0"}]
 end
 ```
 
