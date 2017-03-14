@@ -1,0 +1,37 @@
+{
+  "Item": {
+    "Name": "Pump",
+    "Description": "Fountain Pump",
+    "Active": true,
+    "FullyQualifiedName": "Pump",
+    "Taxable": true,
+    "UnitPrice": 15,
+    "Type": "Inventory",
+    "IncomeAccountRef": {
+      "value": "79",
+      "name": "Sales of Product Income"
+    },
+    "PurchaseDesc": "Fountain Pump",
+    "PurchaseCost": 10,
+    "ExpenseAccountRef": {
+      "value": "80",
+      "name": "Cost of Goods Sold"
+    },
+    "AssetAccountRef": {
+      "value": "81",
+      "name": "Inventory Asset"
+    },
+    "TrackQtyOnHand": true,
+    "QtyOnHand": 25,
+    "InvStartDate": "2017-01-31",
+    "domain": "QBO",
+    "sparse": false,
+    "Id": "11",
+    "SyncToken": "3",
+    "MetaData": {
+      "CreateTime": "2017-01-28T10:46:45-08:00",
+      "LastUpdatedTime": "2017-01-31T13:16:17-08:00"
+    }
+  },
+  "time": "2017-03-14T11:25:54.133-07:00"
+}

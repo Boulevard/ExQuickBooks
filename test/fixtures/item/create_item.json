@@ -1,0 +1,35 @@
+{
+  "Item": {
+    "Name": "Garden Supplies",
+    "Active": true,
+    "FullyQualifiedName": "Garden Supplies",
+    "Taxable": false,
+    "UnitPrice": 0,
+    "Type": "Inventory",
+    "IncomeAccountRef": {
+      "value": "79",
+      "name": "Sales of Product Income"
+    },
+    "PurchaseCost": 0,
+    "ExpenseAccountRef": {
+      "value": "80",
+      "name": "Cost of Goods Sold"
+    },
+    "AssetAccountRef": {
+      "value": "81",
+      "name": "Inventory Asset"
+    },
+    "TrackQtyOnHand": true,
+    "QtyOnHand": 10,
+    "InvStartDate": "2015-01-01",
+    "domain": "QBO",
+    "sparse": false,
+    "Id": "19",
+    "SyncToken": "0",
+    "MetaData": {
+      "CreateTime": "2017-03-14T11:24:36-07:00",
+      "LastUpdatedTime": "2017-03-14T11:24:36-07:00"
+    }
+  },
+  "time": "2017-03-14T11:24:36.246-07:00"
+}
