@@ -2,9 +2,9 @@ defmodule ExQuickBooks.OAuthTest do
   use ExUnit.Case, async: false
   use ExQuickBooks.APICase
 
-  alias ExQuickBooks.AccessToken
   alias ExQuickBooks.OAuth
-  alias ExQuickBooks.RequestToken
+  alias ExQuickBooks.OAuth.AccessToken
+  alias ExQuickBooks.OAuth.RequestToken
 
   doctest OAuth
 

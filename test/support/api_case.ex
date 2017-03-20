@@ -5,7 +5,7 @@ defmodule ExQuickBooks.APICase do
     end
   end
 
-  alias ExQuickBooks.MockBackend
+  alias ExQuickBooks.Backend
   alias HTTPoison.Response
 
   def http_200_response do
@@ -43,8 +43,8 @@ defmodule ExQuickBooks.APICase do
     }
   end
 
-  defdelegate take_request, to: MockBackend
-  defdelegate send_response(response), to: MockBackend
+  defdelegate take_request, to: Backend.Mock
+  defdelegate send_response(response), to: Backend.Mock
 
   defp type_for_extension("json"),  do: "application/json"
   defp type_for_extension(_),       do: "text/plain"

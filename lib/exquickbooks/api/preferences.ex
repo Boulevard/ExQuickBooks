@@ -1,4 +1,4 @@
-defmodule ExQuickBooks.Preferences do
+defmodule ExQuickBooks.API.Preferences do
   @moduledoc """
   Functions for interacting with the Preferences API.
 
@@ -7,9 +7,9 @@ defmodule ExQuickBooks.Preferences do
   """
 
   use ExQuickBooks.Endpoint, base_url: ExQuickBooks.accounting_api
-  use ExQuickBooks.JSONEndpoint
+  use ExQuickBooks.Endpoint.JSON
 
-  alias ExQuickBooks.AccessToken
+  alias ExQuickBooks.OAuth.AccessToken
 
   @doc """
   Retrieves preferences for the realm.
@@ -26,7 +26,7 @@ defmodule ExQuickBooks.Preferences do
   Updates and retrieves preferences for the realm.
 
   This operation performs a full update. The preferences map must define all of
-  the keys in the full preferences map returned by `read_preferences/2`,
+  the keys in the full preferences map returned by `read_preferences/1`,
   otherwise the omitted values are set to their default values or NULL.
   """
   @spec update_preferences(AccessToken.t, json_map) ::

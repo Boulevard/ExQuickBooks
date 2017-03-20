@@ -3,7 +3,7 @@ defmodule ExQuickBooks.EndpointTest do
   use ExQuickBooks.APICase
   use ExQuickBooks.Endpoint, base_url: "http://localhost/"
 
-  alias ExQuickBooks.AccessToken
+  alias ExQuickBooks.OAuth.AccessToken
   alias ExQuickBooks.Request
 
   doctest ExQuickBooks.Endpoint

@@ -15,8 +15,8 @@ defmodule ExQuickBooks.OAuth do
   {:ok, request_token} = ExQuickBooks.get_request_token(callback_url)
   ```
 
-  The token is an `ExQuickBooks.RequestToken`, see its documentation for more
-  details.
+  The token is an `ExQuickBooks.OAuth.RequestToken`, see its documentation for
+  more details.
 
   You should redirect the user to `request_token.redirect_url` to authorise
   your application to access their QuickBooks data. After that step they are
@@ -48,14 +48,14 @@ defmodule ExQuickBooks.OAuth do
   ```
 
   Now you can store the access token and use it in API calls to authenticate on
-  behalf of the user. The token is an `ExQuickBooks.AccessToken`, see its
+  behalf of the user. The token is an `ExQuickBooks.OAuth.AccessToken`, see its
   documentation for more details.
   """
 
   use ExQuickBooks.Endpoint, base_url: ExQuickBooks.oauth_api
 
-  alias ExQuickBooks.AccessToken
-  alias ExQuickBooks.RequestToken
+  alias ExQuickBooks.OAuth.AccessToken
+  alias ExQuickBooks.OAuth.RequestToken
 
   @doc """
   Retrieves a new request token.

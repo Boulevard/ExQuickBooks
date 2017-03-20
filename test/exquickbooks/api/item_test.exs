@@ -1,9 +1,9 @@
-defmodule ExQuickBooks.ItemTest do
+defmodule ExQuickBooks.API.ItemTest do
   use ExUnit.Case, async: false
   use ExQuickBooks.APICase
 
-  alias ExQuickBooks.AccessToken
-  alias ExQuickBooks.Item
+  alias ExQuickBooks.API.Item
+  alias ExQuickBooks.OAuth.AccessToken
 
   doctest Item
 

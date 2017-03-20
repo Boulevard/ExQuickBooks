@@ -1,4 +1,4 @@
-defmodule ExQuickBooks.MockBackend do
+defmodule ExQuickBooks.Backend.Mock do
   @moduledoc false
   @behaviour ExQuickBooks.Backend
 
