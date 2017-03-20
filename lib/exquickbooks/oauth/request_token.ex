@@ -1,6 +1,6 @@
-defmodule ExQuickBooks.AccessToken do
+defmodule ExQuickBooks.OAuth.RequestToken do
   @moduledoc """
-  OAuth 1.0a token/secret pair for authenticating API calls.
+  OAuth 1.0a token/secret pair for requesting an access token.
 
   See `ExQuickBooks.OAuth` for documentation on how to obtain these tokens.
 
@@ -12,28 +12,28 @@ defmodule ExQuickBooks.AccessToken do
     The public key string.
   - `:token_secret` -
     The private key string.
-  - `:realm_id` -
-    ID of the Realm this token is associated with.
+  - `:redirect_url` -
+    URL where you should redirect the user to continue authentication.
 
   The token is sent with API requests, but the secret is only used to calculate
   the request signatures.
 
   ## Storing the token
 
-  You can store the token as is if your storage supports maps (in a Postgres
-  `jsonb` column, for example) or store the keys individually.
+  You can store this token in the user’s session until the OAuth callback. Make
+  sure the session storage is encrypted.
   """
 
   @type t :: %__MODULE__{
     token: String.t,
     token_secret: String.t,
-    realm_id: String.t
+    redirect_url: String.t
   }
 
   @enforce_keys [
     :token,
     :token_secret,
-    :realm_id
+    :redirect_url
   ]
 
   defstruct @enforce_keys

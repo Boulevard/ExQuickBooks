@@ -1,4 +1,4 @@
-defmodule ExQuickBooks.HTTPoisonBackend do
+defmodule ExQuickBooks.Backend.HTTPoison do
   @moduledoc false
   @behaviour ExQuickBooks.Backend
 

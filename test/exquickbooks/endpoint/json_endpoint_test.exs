@@ -1,10 +1,10 @@
-defmodule ExQuickBooks.JSONEndpointTest do
+defmodule ExQuickBooks.Endpoint.JSONTest do
   use ExUnit.Case, async: false
   use ExQuickBooks.APICase
   use ExQuickBooks.Endpoint, base_url: "http://localhost/"
-  use ExQuickBooks.JSONEndpoint
+  use ExQuickBooks.Endpoint.JSON
 
-  doctest ExQuickBooks.JSONEndpoint
+  doctest ExQuickBooks.Endpoint.JSON
 
   test "send_json_request/1 sets appropriate headers" do
     request(:get, "path") |> send_json_request

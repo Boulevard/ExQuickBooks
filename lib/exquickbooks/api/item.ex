@@ -1,4 +1,4 @@
-defmodule ExQuickBooks.Item do
+defmodule ExQuickBooks.API.Item do
   @moduledoc """
   Functions for interacting with the Item API.
 
@@ -7,9 +7,9 @@ defmodule ExQuickBooks.Item do
   """
 
   use ExQuickBooks.Endpoint, base_url: ExQuickBooks.accounting_api
-  use ExQuickBooks.JSONEndpoint
+  use ExQuickBooks.Endpoint.JSON
 
-  alias ExQuickBooks.AccessToken
+  alias ExQuickBooks.OAuth.AccessToken
 
   @doc """
   Creates an item.
@@ -40,7 +40,7 @@ defmodule ExQuickBooks.Item do
   Updates and retrieves an item.
 
   The item map must define all of the keys in the full item map returned by
-  `read_item/3`, otherwise the omitted values are set to their default values
+  `read_item/2`, otherwise the omitted values are set to their default values
   or NULL.
   """
   @spec update_item(AccessToken.t, json_map) ::

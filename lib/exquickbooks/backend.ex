@@ -1,7 +1,7 @@
 defmodule ExQuickBooks.Backend do
   @moduledoc false
 
-  alias ExQuickBooks.Request
+  alias ExQuickBooks.Backend.Request
   alias HTTPoison.Error
   alias HTTPoison.Response
 

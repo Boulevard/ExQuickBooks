@@ -1,9 +1,9 @@
-defmodule ExQuickBooks.PreferencesTest do
+defmodule ExQuickBooks.API.PreferencesTest do
   use ExUnit.Case, async: false
   use ExQuickBooks.APICase
 
-  alias ExQuickBooks.AccessToken
-  alias ExQuickBooks.Preferences
+  alias ExQuickBooks.API.Preferences
+  alias ExQuickBooks.OAuth.AccessToken
 
   doctest Preferences
 

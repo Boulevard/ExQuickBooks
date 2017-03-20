@@ -1,4 +1,4 @@
-defmodule ExQuickBooks.JSONEndpoint do
+defmodule ExQuickBooks.Endpoint.JSON do
   @moduledoc false
 
   import ExQuickBooks.Endpoint, only: [
