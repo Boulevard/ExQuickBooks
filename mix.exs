@@ -3,7 +3,7 @@ defmodule ExQuickBooks.Mixfile do
 
   def project do
     [app: :exquickbooks,
-     version: "0.5.0",
+     version: "0.6.0",
      elixir: "~> 1.4",
 
      # Compilation
@@ -32,7 +32,7 @@ defmodule ExQuickBooks.Mixfile do
   end
 
   defp env do
-    [backend: ExQuickBooks.HTTPoisonBackend]
+    [backend: ExQuickBooks.Backend.HTTPoison]
   end
 
   defp description do
