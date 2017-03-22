@@ -32,7 +32,7 @@ defmodule ExQuickBooks.Mixfile do
   end
 
   defp env do
-    [backend: ExQuickBooks.HTTPoisonBackend]
+    [backend: ExQuickBooks.Backend.HTTPoison]
   end
 
   defp description do
