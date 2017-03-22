@@ -1,0 +1,13 @@
+{
+  "Fault": {
+    "Error": [
+      {
+        "Message": "Error parsing query",
+        "Detail": "QueryParserError: Encountered \" \"null\" \"NULL \"\" at line 1, column 15.\nWas expecting:\n    <IDENTIFIER> ...\n    ",
+        "code": "4000"
+      }
+    ],
+    "type": "ValidationFault"
+  },
+  "time": "2017-03-22T09:04:34.046-07:00"
+}
