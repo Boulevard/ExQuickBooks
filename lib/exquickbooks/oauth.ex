@@ -93,7 +93,6 @@ defmodule ExQuickBooks.OAuth do
   def get_access_token(request_token = %RequestToken{}, realm_id, verifier) do
     result =
       request(:post, "get_access_token", nil, nil, params: [
-        {"oauth_token", request_token.token},
         {"oauth_verifier", verifier}
       ])
       |> sign_request(request_token)
