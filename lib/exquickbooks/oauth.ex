@@ -12,7 +12,7 @@ defmodule ExQuickBooks.OAuth do
   token using `get_request_token/1`:
 
   ```
-  {:ok, request_token} = ExQuickBooks.get_request_token(callback_url)
+  {:ok, request_token} = ExQuickBooks.OAuth.get_request_token(callback_url)
   ```
 
   The token is an `ExQuickBooks.OAuth.RequestToken`, see its documentation for
@@ -44,7 +44,7 @@ defmodule ExQuickBooks.OAuth do
   callback request parameters for an access token using `get_access_token/3`:
 
   ```
-  {:ok, access_token} = ExQuickBooks.get_access_token(request_token, realm_id, verifier)
+  {:ok, access_token} = ExQuickBooks.OAuth.get_access_token(request_token, realm_id, verifier)
   ```
 
   Now you can store the access token and use it in API calls to authenticate on

@@ -8,10 +8,11 @@
 
 Everything is still a work in progress.
 
-- OAuth
+- OAuth 1.0a
 - Data queries
 - Item API
 - Preferences API
+- SalesReceipt API
 
 ## Installation
 
@@ -20,7 +21,7 @@ dependencies in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:exquickbooks, "~> 0.6.1"}]
+  [{:exquickbooks, "~> 0.7.0"}]
 end
 ```
 
