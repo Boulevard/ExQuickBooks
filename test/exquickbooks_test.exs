@@ -92,13 +92,17 @@ defmodule ExQuickBooksTest do
     Application.delete_env(:exquickbooks, key)
   end
 
+  defp keyword_list_equal?(env1, env2) do
+    List.keysort(env1, 1) == List.keysort(env2, 1)
+  end
+
   defp restore_env(old_env) do
     new_env = get_all_env()
 
     for {k, _} <- new_env, do: delete_env(k)
     for {k, v} <- old_env, do: put_env(k, v)
 
-    get_all_env() == old_env || raise """
+    keyword_list_equal?(get_all_env(), old_env) || raise """
     Could not restore the application's environment. Check that you're not
     modifying it simultaneously in other tests. Those tests should specify
     `async: false`.

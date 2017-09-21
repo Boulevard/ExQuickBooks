@@ -1,0 +1,57 @@
+{
+  "time": "2017-09-20T18:32:11.363-07:00",
+  "SalesReceipt": {
+    "sparse": false,
+    "domain": "QBO",
+    "TxnDate": "2017-09-20",
+    "TotalAmt": 0,
+    "SyncToken": "0",
+    "PrintStatus": "NeedToPrint",
+    "MetaData": {
+      "LastUpdatedTime": "2017-09-20T18:32:11-07:00",
+      "CreateTime": "2017-09-20T18:32:11-07:00"
+    },
+    "Line": [
+      {
+        "SalesItemLineDetail": {
+          "UnitPrice": 0,
+          "TaxCodeRef": {
+            "value": "NON"
+          },
+          "Qty": 1,
+          "ItemRef": {
+            "value": "3",
+            "name": "Oribe:Shampoo:Test Product"
+          }
+        },
+        "LineNum": 1,
+        "Id": "1",
+        "DetailType": "SalesItemLineDetail",
+        "Amount": 0
+      },
+      {
+        "SubTotalLineDetail": {
+
+        },
+        "DetailType": "SubTotalLineDetail",
+        "Amount": 0
+      }
+    ],
+    "Id": "6",
+    "EmailStatus": "NotSet",
+    "DocNumber": "1005",
+    "DepositToAccountRef": {
+      "value": "4",
+      "name": "Undeposited Funds"
+    },
+    "CustomField": [
+
+    ],
+    "CurrencyRef": {
+      "value": "USD",
+      "name": "United States Dollar"
+    },
+    "Balance": 0,
+    "ApplyTaxAfterDiscount": false
+  }
+}

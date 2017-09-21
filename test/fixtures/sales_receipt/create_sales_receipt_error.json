@@ -1,0 +1,14 @@
+{
+  "time": "2017-09-20T18:40:29.968-07:00",
+  "Fault": {
+    "type": "ValidationFault",
+    "Error": [
+      {
+        "element": "Line.DetailType",
+        "code": "2020",
+        "Message": "Required param missing, need to supply the required value for the API",
+        "Detail": "Required parameter Line.DetailType is missing in the request"
+      }
+    ]
+  }
+}
