@@ -21,7 +21,7 @@ dependencies in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:exquickbooks, "~> 0.7.0"}]
+  [{:exquickbooks, "~> 0.8.0"}]
 end
 ```
 

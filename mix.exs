@@ -3,7 +3,7 @@ defmodule ExQuickBooks.Mixfile do
 
   def project do
     [app: :exquickbooks,
-     version: "0.7.0",
+     version: "0.8.0",
      elixir: "~> 1.4",
 
      # Compilation
