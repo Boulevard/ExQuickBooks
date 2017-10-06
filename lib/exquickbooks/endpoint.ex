@@ -39,16 +39,32 @@ defmodule ExQuickBooks.Endpoint do
       |> Map.to_list
       |> OAuther.credentials
 
+    request_params =
+      (request.options[:params] || [])
+      |> append_default_minorversion()
+
     {header, new_params} =
       request.method
       |> to_string
-      |> OAuther.sign(request.url, request.options[:params] || [], credentials)
+      |> OAuther.sign(request.url, request_params, credentials)
       |> OAuther.header
 
     new_headers = merge_headers(request.headers, [header])
     new_options = Keyword.put(request.options, :params, new_params)
 
     %{request | headers: new_headers, options: new_options}
+  end
+
+  defp append_default_minorversion(params) do
+    has_minorversion = Enum.any?(params, fn
+      {"minorversion", _} -> true
+      _ -> false
+    end)
+
+    case has_minorversion do
+      true -> params
+      false -> [{"minorversion", ExQuickBooks.minorversion} | params]
+    end
   end
 
   def send_request(request = %Request{}) do

@@ -46,6 +46,8 @@ defmodule ExQuickBooks do
   @backend_config :backend
   @credential_config [:consumer_key, :consumer_secret]
   @use_production_api_config :use_production_api
+  @minorversion :minorversion
+  @default_minorversion 12
 
   # Returns the Intuit OAuth API URL.
   @doc false
@@ -89,6 +91,10 @@ defmodule ExQuickBooks do
           raise_invalid(k, v)
       end
     end
+  end
+
+  def minorversion do
+    get_env(@minorversion, @default_minorversion)
   end
 
   # Returns a value from the application's environment. If the value matches
