@@ -4,8 +4,8 @@ defmodule ExQuickBooks.Mixfile do
   def project do
     [
       app: :exquickbooks,
-      version: "0.8.0",
-      elixir: "~> 1.4",
+      version: "0.9.0",
+      elixir: "~> 1.12",
 
       # Compilation
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -65,9 +65,9 @@ defmodule ExQuickBooks.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:httpoison, "~> 0.11"},
+      {:httpoison, "~> 1.8"},
       {:oauther, "~> 1.1"},
-      {:poison, "~> 3.1"},
+      {:poison, "~> 4.0"},
       {:ex_doc, "~> 0.15", only: :dev, runtime: false},
       {:excoveralls, "~> 0.6", only: :test}
     ]

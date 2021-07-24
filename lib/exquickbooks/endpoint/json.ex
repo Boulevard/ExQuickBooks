@@ -40,7 +40,7 @@ defmodule ExQuickBooks.Endpoint.JSON do
   end
 
   defp encode_body(body) do
-    Poison.Encoder.encode(body, [])
+    Poison.Encoder.encode(body, %{})
   end
 
   defp parse_response({ok_error, response = %Response{}}) do
@@ -50,7 +50,7 @@ defmodule ExQuickBooks.Endpoint.JSON do
       |> String.starts_with?("application/json")
 
     if is_json do
-      {ok_error, Poison.Parser.parse!(response.body)}
+      {ok_error, Poison.Parser.parse!(response.body, %{})}
     else
       {ok_error, response}
     end
