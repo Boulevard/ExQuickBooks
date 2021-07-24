@@ -45,8 +45,8 @@ defmodule ExQuickBooks.Mixfile do
   defp package do
     [
       licenses: ["ISC"],
-      maintainers: ["Boulevard Labs, Inc."],
-      links: %{"GitHub" => "https://github.com/Boulevard/ExQuickBooks"}
+      maintainers: ["Evan O'Brien"],
+      links: %{"GitHub" => "https://github.com/evanob/ExQuickBooks"}
     ]
   end
 
