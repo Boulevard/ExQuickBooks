@@ -2,33 +2,34 @@ defmodule ExQuickBooks.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :exquickbooks,
-     version: "0.8.0",
-     elixir: "~> 1.4",
+    [
+      app: :exquickbooks,
+      version: "0.8.0",
+      elixir: "~> 1.4",
 
-     # Compilation
-     elixirc_paths: elixirc_paths(Mix.env),
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
+      # Compilation
+      elixirc_paths: elixirc_paths(Mix.env()),
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
 
-     # Packaging
-     name: "ExQuickBooks",
-     description: description(),
-     package: package(),
-     deps: deps(),
-     docs: docs(),
+      # Packaging
+      name: "ExQuickBooks",
+      description: description(),
+      package: package(),
+      deps: deps(),
+      docs: docs(),
 
-     # Test coverage
-     test_coverage: [tool: ExCoveralls],
-     preferred_cli_env: [coveralls: :test]]
+      # Test coverage
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [coveralls: :test]
+    ]
   end
 
   # Configuration for the OTP application
   #
   # Type "mix help compile.app" for more information
   def application do
-    [env: env(),
-     extra_applications: [:logger, :httpoison]]
+    [env: env(), extra_applications: [:logger, :httpoison]]
   end
 
   defp env do
@@ -42,9 +43,11 @@ defmodule ExQuickBooks.Mixfile do
   end
 
   defp package do
-    [licenses: ["ISC"],
-     maintainers: ["Boulevard Labs, Inc."],
-     links: %{"GitHub" => "https://github.com/Boulevard/ExQuickBooks"}]
+    [
+      licenses: ["ISC"],
+      maintainers: ["Boulevard Labs, Inc."],
+      links: %{"GitHub" => "https://github.com/Boulevard/ExQuickBooks"}
+    ]
   end
 
   defp docs do
@@ -61,13 +64,15 @@ defmodule ExQuickBooks.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:httpoison, "~> 0.11"},
-     {:oauther, "~> 1.1"},
-     {:poison, "~> 3.1"},
-     {:ex_doc, "~> 0.15", only: :dev, runtime: false},
-     {:excoveralls, "~> 0.6", only: :test}]
+    [
+      {:httpoison, "~> 0.11"},
+      {:oauther, "~> 1.1"},
+      {:poison, "~> 3.1"},
+      {:ex_doc, "~> 0.15", only: :dev, runtime: false},
+      {:excoveralls, "~> 0.6", only: :test}
+    ]
   end
 
-  defp elixirc_paths(:test),  do: ["lib", "test/support"]
-  defp elixirc_paths(_),      do: ["lib"]
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 end

@@ -25,7 +25,7 @@ defmodule ExQuickBooks.Backend.Mock do
   end
 
   def send_response(response = %Response{}) do
-    send self(), {__MODULE__, response}
+    send(self(), {__MODULE__, response})
   end
 
   defp take_response(timeout \\ 0) do
@@ -37,6 +37,6 @@ defmodule ExQuickBooks.Backend.Mock do
   end
 
   defp send_request(request = %Request{}) do
-    send self(), {__MODULE__, request}
+    send(self(), {__MODULE__, request})
   end
 end

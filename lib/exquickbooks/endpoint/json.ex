@@ -1,10 +1,11 @@
 defmodule ExQuickBooks.Endpoint.JSON do
   @moduledoc false
 
-  import ExQuickBooks.Endpoint, only: [
-    merge_headers: 2,
-    send_request: 1
-  ]
+  import ExQuickBooks.Endpoint,
+    only: [
+      merge_headers: 2,
+      send_request: 1
+    ]
 
   alias ExQuickBooks.Request
   alias HTTPoison.Response
@@ -16,11 +17,12 @@ defmodule ExQuickBooks.Endpoint.JSON do
 
   defmacro __using__(_) do
     quote do
-      import unquote(__MODULE__), only: [
-        send_json_request: 1
-      ]
+      import unquote(__MODULE__),
+        only: [
+          send_json_request: 1
+        ]
 
-      @type json_map :: %{required(String.t) => any}
+      @type json_map :: %{required(String.t()) => any}
     end
   end
 
@@ -36,6 +38,7 @@ defmodule ExQuickBooks.Endpoint.JSON do
   defp encode_body(body) when is_binary(body) do
     body
   end
+
   defp encode_body(body) do
     Poison.Encoder.encode(body, [])
   end
@@ -52,12 +55,13 @@ defmodule ExQuickBooks.Endpoint.JSON do
       {ok_error, response}
     end
   end
+
   defp parse_response(non_response_result) do
     non_response_result
   end
 
   defp parse_content_type(%Response{headers: headers}) do
-    Enum.find_value(headers, "text/plain", fn({header, value}) ->
+    Enum.find_value(headers, "text/plain", fn {header, value} ->
       if String.downcase(header) == "content-type", do: value
     end)
   end

@@ -25,10 +25,10 @@ defmodule ExQuickBooks.OAuth.AccessToken do
   """
 
   @type t :: %__MODULE__{
-    token: String.t,
-    token_secret: String.t,
-    realm_id: String.t
-  }
+          token: String.t(),
+          token_secret: String.t(),
+          realm_id: String.t()
+        }
 
   @enforce_keys [
     :token,

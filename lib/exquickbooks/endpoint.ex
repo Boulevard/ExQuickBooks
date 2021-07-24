@@ -10,11 +10,12 @@ defmodule ExQuickBooks.Endpoint do
     merged_using_options = Keyword.merge(@default_using_options, using_options)
 
     quote do
-      import unquote(__MODULE__), only: [
-        sign_request: 1,
-        sign_request: 2,
-        send_request: 1
-      ]
+      import unquote(__MODULE__),
+        only: [
+          sign_request: 1,
+          sign_request: 2,
+          send_request: 1
+        ]
 
       @doc false
       def request(method, url, body \\ nil, headers \\ nil, options \\ nil) do
@@ -35,9 +36,9 @@ defmodule ExQuickBooks.Endpoint do
     credentials =
       token
       |> Map.take([:token, :token_secret])
-      |> Map.merge(ExQuickBooks.credentials)
-      |> Map.to_list
-      |> OAuther.credentials
+      |> Map.merge(ExQuickBooks.credentials())
+      |> Map.to_list()
+      |> OAuther.credentials()
 
     request_params =
       (request.options[:params] || [])
@@ -47,7 +48,7 @@ defmodule ExQuickBooks.Endpoint do
       request.method
       |> to_string
       |> OAuther.sign(request.url, request_params, credentials)
-      |> OAuther.header
+      |> OAuther.header()
 
     new_headers = merge_headers(request.headers, [header])
     new_options = Keyword.put(request.options, :params, new_params)
@@ -56,19 +57,20 @@ defmodule ExQuickBooks.Endpoint do
   end
 
   defp append_default_minorversion(params) do
-    has_minorversion = Enum.any?(params, fn
-      {"minorversion", _} -> true
-      _ -> false
-    end)
+    has_minorversion =
+      Enum.any?(params, fn
+        {"minorversion", _} -> true
+        _ -> false
+      end)
 
     case has_minorversion do
       true -> params
-      false -> [{"minorversion", ExQuickBooks.minorversion} | params]
+      false -> [{"minorversion", ExQuickBooks.minorversion()} | params]
     end
   end
 
   def send_request(request = %Request{}) do
-    with {:ok, response} <- ExQuickBooks.backend.request(request) do
+    with {:ok, response} <- ExQuickBooks.backend().request(request) do
       parse_status(response)
     end
   end
@@ -82,6 +84,7 @@ defmodule ExQuickBooks.Endpoint do
   defp parse_status(response = %Response{status_code: c}) when c in 200..299 do
     {:ok, response}
   end
+
   defp parse_status(response = %Response{}) do
     {:error, response}
   end

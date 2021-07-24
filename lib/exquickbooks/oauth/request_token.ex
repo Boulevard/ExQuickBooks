@@ -25,10 +25,10 @@ defmodule ExQuickBooks.OAuth.RequestToken do
   """
 
   @type t :: %__MODULE__{
-    token: String.t,
-    token_secret: String.t,
-    redirect_url: String.t
-  }
+          token: String.t(),
+          token_secret: String.t(),
+          redirect_url: String.t()
+        }
 
   @enforce_keys [
     :token,

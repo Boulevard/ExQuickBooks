@@ -5,5 +5,5 @@ defmodule ExQuickBooks.Backend do
   alias HTTPoison.Error
   alias HTTPoison.Response
 
-  @callback request(Request.t) :: {:ok, Response.t} | {:error, Error.t}
+  @callback request(Request.t()) :: {:ok, Response.t()} | {:error, Error.t()}
 end

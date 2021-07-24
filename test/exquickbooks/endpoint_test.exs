@@ -14,8 +14,8 @@ defmodule ExQuickBooks.EndpointTest do
 
   test "sign_request/1 signs with consumer credentials" do
     assert %Request{
-      headers: [{"Authorization", "OAuth " <> authorization}]
-    } = request(:get, "foo") |> sign_request
+             headers: [{"Authorization", "OAuth " <> authorization}]
+           } = request(:get, "foo") |> sign_request
 
     assert String.contains?(authorization, "oauth_consumer_key")
     refute String.contains?(authorization, "oauth_token")
@@ -29,8 +29,8 @@ defmodule ExQuickBooks.EndpointTest do
     }
 
     assert %Request{
-      headers: [{"Authorization", "OAuth " <> authorization}]
-    } = request(:get, "foo") |> sign_request(token)
+             headers: [{"Authorization", "OAuth " <> authorization}]
+           } = request(:get, "foo") |> sign_request(token)
 
     assert String.contains?(authorization, "oauth_consumer_key")
     assert String.contains?(authorization, "oauth_token")

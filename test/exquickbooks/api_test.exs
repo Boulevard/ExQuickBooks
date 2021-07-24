@@ -16,14 +16,13 @@ defmodule ExQuickBooks.APITest do
   test "query/2 retrieves a query response" do
     load_response("api/query.json") |> send_response
 
-    assert {:ok, %{"QueryResponse" => _}} =
-      API.query(@token, "SELECT * FROM Item")
+    assert {:ok, %{"QueryResponse" => _}} = API.query(@token, "SELECT * FROM Item")
 
     assert %{
-      url: url,
-      headers: headers,
-      options: [params: params]
-    } = take_request()
+             url: url,
+             headers: headers,
+             options: [params: params]
+           } = take_request()
 
     assert String.contains?(url, "/query")
 
@@ -38,7 +37,6 @@ defmodule ExQuickBooks.APITest do
     |> Map.put(:status_code, 400)
     |> send_response
 
-    assert {:error, %{"Fault" => _}} =
-      API.query(@token, "SELECT * FROM NULL")
+    assert {:error, %{"Fault" => _}} = API.query(@token, "SELECT * FROM NULL")
   end
 end

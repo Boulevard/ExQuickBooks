@@ -71,8 +71,10 @@ defmodule ExQuickBooks do
     case get_env(@backend_config) do
       backend when is_atom(backend) ->
         backend
+
       nil ->
         raise_missing(@backend_config)
+
       other ->
         raise_invalid(@backend_config, other)
     end
@@ -85,8 +87,10 @@ defmodule ExQuickBooks do
       case get_env(k) do
         v when is_binary(v) ->
           {k, v}
+
         nil ->
           raise_missing(k)
+
         v ->
           raise_invalid(k, v)
       end
@@ -103,22 +107,24 @@ defmodule ExQuickBooks do
   defp get_env(key, default \\ nil) do
     with {:system, var} <- Application.get_env(:exquickbooks, key, default) do
       case System.get_env(var) do
-        "true"  -> true
+        "true" -> true
         "false" -> false
-         value  -> value
+        value -> value
       end
     end
   end
 
   defp raise_missing(key) do
-    raise ArgumentError, message: """
-    ExQuickBooks config #{inspect(key)} is required.
-    """
+    raise ArgumentError,
+      message: """
+      ExQuickBooks config #{inspect(key)} is required.
+      """
   end
 
   defp raise_invalid(key, value) do
-    raise ArgumentError, message: """
-    ExQuickBooks config #{inspect(key)} is invalid, got: #{inspect(value)}
-    """
+    raise ArgumentError,
+      message: """
+      ExQuickBooks config #{inspect(key)} is invalid, got: #{inspect(value)}
+      """
   end
 end

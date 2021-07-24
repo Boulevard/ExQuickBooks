@@ -52,7 +52,7 @@ defmodule ExQuickBooks.OAuth do
   documentation for more details.
   """
 
-  use ExQuickBooks.Endpoint, base_url: ExQuickBooks.oauth_api
+  use ExQuickBooks.Endpoint, base_url: ExQuickBooks.oauth_api()
 
   alias ExQuickBooks.OAuth.AccessToken
   alias ExQuickBooks.OAuth.RequestToken
@@ -66,20 +66,22 @@ defmodule ExQuickBooks.OAuth do
   Returns the request token with a URL where your application should redirect
   the user as `request_token.redirect_url`.
   """
-  @spec get_request_token(String.t) ::
-    {:ok, RequestToken.t} | {:error, any}
+  @spec get_request_token(String.t()) ::
+          {:ok, RequestToken.t()} | {:error, any}
   def get_request_token(callback_url) do
     result =
-      request(:post, "get_request_token", nil, nil, params: [
-        {"oauth_callback", callback_url}
-      ])
+      request(:post, "get_request_token", nil, nil,
+        params: [
+          {"oauth_callback", callback_url}
+        ]
+      )
       |> sign_request
       |> send_request
 
-    with {:ok, response}  <- result,
-         {:ok, body}      <- parse_body(response),
-         {:ok, token}     <- parse_token(body),
-     do: {:ok, create_request_token(token)}
+    with {:ok, response} <- result,
+         {:ok, body} <- parse_body(response),
+         {:ok, token} <- parse_token(body),
+         do: {:ok, create_request_token(token)}
   end
 
   @doc """
@@ -88,25 +90,28 @@ defmodule ExQuickBooks.OAuth do
   You should have previously received the realm ID and token verifier in the
   callback URL params as `"realmId"` and `"oauth_verifier"`.
   """
-  @spec get_access_token(RequestToken.t, String.t, String.t) ::
-    {:ok, AccessToken.t} | {:error, any}
+  @spec get_access_token(RequestToken.t(), String.t(), String.t()) ::
+          {:ok, AccessToken.t()} | {:error, any}
   def get_access_token(request_token = %RequestToken{}, realm_id, verifier) do
     result =
-      request(:post, "get_access_token", nil, nil, params: [
-        {"oauth_verifier", verifier}
-      ])
+      request(:post, "get_access_token", nil, nil,
+        params: [
+          {"oauth_verifier", verifier}
+        ]
+      )
       |> sign_request(request_token)
       |> send_request
 
-    with {:ok, response}  <- result,
-         {:ok, body}      <- parse_body(response),
-         {:ok, token}     <- parse_token(body),
-     do: {:ok, create_access_token(token, realm_id)}
+    with {:ok, response} <- result,
+         {:ok, body} <- parse_body(response),
+         {:ok, token} <- parse_token(body),
+         do: {:ok, create_access_token(token, realm_id)}
   end
 
   defp parse_body(%{body: body}) when is_binary(body) do
     {:ok, URI.decode_query(body)}
   end
+
   defp parse_body(_) do
     {:error, "Response body was malformed."}
   end
@@ -114,9 +119,11 @@ defmodule ExQuickBooks.OAuth do
   defp parse_token(%{"oauth_token" => token, "oauth_token_secret" => secret}) do
     {:ok, %{token: token, token_secret: secret}}
   end
+
   defp parse_token(body = %{"oauth_problem" => _}) do
     {:error, body}
   end
+
   defp parse_token(_) do
     {:error, "Response body did not contain oauth_token or oauth_problem."}
   end
@@ -125,7 +132,7 @@ defmodule ExQuickBooks.OAuth do
     values =
       token
       |> Map.put(:redirect_url, redirect_url(token))
-      |> Map.to_list
+      |> Map.to_list()
 
     struct!(RequestToken, values)
   end
@@ -134,7 +141,7 @@ defmodule ExQuickBooks.OAuth do
     values =
       token
       |> Map.put(:realm_id, realm_id)
-      |> Map.to_list
+      |> Map.to_list()
 
     struct!(AccessToken, values)
   end

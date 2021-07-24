@@ -6,7 +6,7 @@ defmodule ExQuickBooks.API do
   <https://developer.intuit.com/v2/docs/api/accounting>
   """
 
-  use ExQuickBooks.Endpoint, base_url: ExQuickBooks.accounting_api
+  use ExQuickBooks.Endpoint, base_url: ExQuickBooks.accounting_api()
   use ExQuickBooks.Endpoint.JSON
 
   alias ExQuickBooks.OAuth.AccessToken
@@ -18,7 +18,7 @@ defmodule ExQuickBooks.API do
 
   [0]: https://developer.intuit.com/docs/0100_quickbooks_online/0300_references/0000_programming_guide/0050_data_queries
   """
-  @spec query(AccessToken.t, String.t) :: {:ok, json_map} | {:error, any}
+  @spec query(AccessToken.t(), String.t()) :: {:ok, json_map} | {:error, any}
   def query(token, query) do
     headers = [{"Content-Type", "text/plain"}]
     options = [params: [{"query", query}]]

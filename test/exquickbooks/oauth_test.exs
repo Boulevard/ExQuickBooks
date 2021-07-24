@@ -24,41 +24,39 @@ defmodule ExQuickBooks.OAuthTest do
     load_response("oauth/get_request_token") |> send_response
 
     assert OAuth.get_request_token("http://example.com") ==
-      {:ok, @request_token}
+             {:ok, @request_token}
   end
 
   test "get_request_token/1 recovers when there's an OAuth problem" do
     load_response("oauth/get_request_token_problem") |> send_response
 
     assert OAuth.get_request_token("http://example.com") ==
-      {:error, %{"oauth_problem" => "signature_invalid"}}
+             {:error, %{"oauth_problem" => "signature_invalid"}}
   end
 
   test "get_request_token/1 recovers when there's some other error" do
     http_400_response() |> send_response
 
-    assert {:error, _} =
-      OAuth.get_request_token("http://example.com")
+    assert {:error, _} = OAuth.get_request_token("http://example.com")
   end
 
   test "get_access_token/3 returns an access token" do
     load_response("oauth/get_access_token") |> send_response
 
     assert OAuth.get_access_token(@request_token, "realm_id", "verifier") ==
-      {:ok, @access_token}
+             {:ok, @access_token}
   end
 
   test "get_access_token/3 recovers when there's an OAuth problem" do
     load_response("oauth/get_access_token_problem") |> send_response
 
     assert OAuth.get_access_token(@request_token, "realm_id", "verifier") ==
-      {:error, %{"oauth_problem" => "signature_invalid"}}
+             {:error, %{"oauth_problem" => "signature_invalid"}}
   end
 
   test "get_access_token/3 recovers when there's some other error" do
     http_400_response() |> send_response
 
-    assert {:error, _} =
-      OAuth.get_access_token(@request_token, "realm_id", "verifier")
+    assert {:error, _} = OAuth.get_access_token(@request_token, "realm_id", "verifier")
   end
 end

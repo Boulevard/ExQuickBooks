@@ -27,13 +27,13 @@ defmodule ExQuickBooks.APICase do
   def load_response(file) do
     body =
       "test/fixtures/#{file}"
-      |> File.read!
-      |> String.strip
+      |> File.read!()
+      |> String.trim()
 
     content_type =
       file
       |> String.split(".")
-      |> List.last
+      |> List.last()
       |> type_for_extension
 
     %Response{
@@ -46,6 +46,6 @@ defmodule ExQuickBooks.APICase do
   defdelegate take_request, to: Backend.Mock
   defdelegate send_response(response), to: Backend.Mock
 
-  defp type_for_extension("json"),  do: "application/json"
-  defp type_for_extension(_),       do: "text/plain"
+  defp type_for_extension("json"), do: "application/json"
+  defp type_for_extension(_), do: "text/plain"
 end
