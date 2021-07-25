@@ -9,7 +9,7 @@ defmodule ExQuickBooks.API.SalesReceipt do
   use ExQuickBooks.Endpoint, base_url: ExQuickBooks.accounting_api()
   use ExQuickBooks.Endpoint.JSON
 
-  alias ExQuickBooks.OAuth.AccessToken
+  alias ExQuickBooks.OAuth.Credentials
 
   @doc """
   Creates an Sales Receipt.
@@ -17,22 +17,22 @@ defmodule ExQuickBooks.API.SalesReceipt do
   A SalesReceipt object must have at least one line that describes an item
   and an amount.
   """
-  @spec create_sales_receipt(AccessToken.t(), json_map) ::
+  @spec create_sales_receipt(Credentials.t(), json_map) ::
           {:ok, json_map} | {:error, any}
-  def create_sales_receipt(token, sales_receipt) do
-    request(:post, "company/#{token.realm_id}/salesreceipt", sales_receipt)
-    |> sign_request(token)
+  def create_sales_receipt(credentials, sales_receipt) do
+    request(:post, "company/#{credentials.realm_id}/salesreceipt", sales_receipt)
+    |> sign_request(credentials)
     |> send_json_request
   end
 
   @doc """
   Retrieves a Sales Receipt.
   """
-  @spec read_sales_receipt(AccessToken.t(), String.t()) ::
+  @spec read_sales_receipt(Credentials.t(), String.t()) ::
           {:ok, json_map} | {:error, any}
-  def read_sales_receipt(token, sales_receipt_id) do
-    request(:get, "company/#{token.realm_id}/salesreceipt/#{sales_receipt_id}")
-    |> sign_request(token)
+  def read_sales_receipt(credentials, sales_receipt_id) do
+    request(:get, "company/#{credentials.realm_id}/salesreceipt/#{sales_receipt_id}")
+    |> sign_request(credentials)
     |> send_json_request
   end
 
@@ -40,15 +40,15 @@ defmodule ExQuickBooks.API.SalesReceipt do
   Void a Sales Receipt. Must include Sparse, Id, and SyncToken as
   sales_receipt attributes.
   """
-  @spec void_sales_receipt(AccessToken.t(), json_map) ::
+  @spec void_sales_receipt(Credentials.t(), json_map) ::
           {:ok, json_map} | {:error, any}
-  def void_sales_receipt(token, sales_receipt) do
-    request(:post, "company/#{token.realm_id}/salesreceipt", sales_receipt, nil,
+  def void_sales_receipt(credentials, sales_receipt) do
+    request(:post, "company/#{credentials.realm_id}/salesreceipt", sales_receipt, nil,
       params: [
         {"include", "void"}
       ]
     )
-    |> sign_request(token)
+    |> sign_request(credentials)
     |> send_json_request
   end
 end

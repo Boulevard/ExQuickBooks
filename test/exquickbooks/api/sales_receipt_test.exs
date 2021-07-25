@@ -3,20 +3,19 @@ defmodule ExQuickBooks.API.SalesReceiptTest do
   use ExQuickBooks.APICase
 
   alias ExQuickBooks.API.SalesReceipt
-  alias ExQuickBooks.OAuth.AccessToken
+  alias ExQuickBooks.OAuth.Credentials
 
   doctest SalesReceipt
 
-  @token %AccessToken{
+  @creds %Credentials{
     token: "token",
-    token_secret: "secret",
     realm_id: "realm_id"
   }
 
   test "create_sales_receipt/3 creates an sales_receipt" do
     load_response("sales_receipt/create_sales_receipt.json") |> send_response
 
-    assert {:ok, %{"SalesReceipt" => _}} = SalesReceipt.create_sales_receipt(@token, %{foo: true})
+    assert {:ok, %{"SalesReceipt" => _}} = SalesReceipt.create_sales_receipt(@creds, %{foo: true})
 
     assert %{body: body} = take_request()
     assert String.contains?(to_string(body), "foo")
@@ -27,13 +26,13 @@ defmodule ExQuickBooks.API.SalesReceiptTest do
     |> Map.put(:status_code, 400)
     |> send_response
 
-    assert {:error, %{"Fault" => _}} = SalesReceipt.create_sales_receipt(@token, %{foo: true})
+    assert {:error, %{"Fault" => _}} = SalesReceipt.create_sales_receipt(@creds, %{foo: true})
   end
 
   test "void_sales_receipt/3 voids and retrieves an sales_receipt" do
     load_response("sales_receipt/void_sales_receipt.json") |> send_response
 
-    assert {:ok, %{"SalesReceipt" => _}} = SalesReceipt.void_sales_receipt(@token, %{foo: true})
+    assert {:ok, %{"SalesReceipt" => _}} = SalesReceipt.void_sales_receipt(@creds, %{foo: true})
 
     assert %{body: body} = take_request()
     assert String.contains?(to_string(body), "foo")
@@ -44,6 +43,6 @@ defmodule ExQuickBooks.API.SalesReceiptTest do
     |> Map.put(:status_code, 400)
     |> send_response
 
-    assert {:error, %{"Fault" => _}} = SalesReceipt.void_sales_receipt(@token, %{foo: true})
+    assert {:error, %{"Fault" => _}} = SalesReceipt.void_sales_receipt(@creds, %{foo: true})
   end
 end

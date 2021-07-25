@@ -9,7 +9,7 @@ defmodule ExQuickBooks.API do
   use ExQuickBooks.Endpoint, base_url: ExQuickBooks.accounting_api()
   use ExQuickBooks.Endpoint.JSON
 
-  alias ExQuickBooks.OAuth.AccessToken
+  alias ExQuickBooks.OAuth.Credentials
 
   @doc """
   Retrieves multiple entities using a SQL-like query.
@@ -18,13 +18,13 @@ defmodule ExQuickBooks.API do
 
   [0]: https://developer.intuit.com/docs/0100_quickbooks_online/0300_references/0000_programming_guide/0050_data_queries
   """
-  @spec query(AccessToken.t(), String.t()) :: {:ok, json_map} | {:error, any}
-  def query(token, query) do
+  @spec query(Credentials.t(), String.t()) :: {:ok, json_map} | {:error, any}
+  def query(credentials, query) do
     headers = [{"Content-Type", "text/plain"}]
     options = [params: [{"query", query}]]
 
-    request(:get, "company/#{token.realm_id}/query", nil, headers, options)
-    |> sign_request(token)
+    request(:get, "company/#{credentials.realm_id}/query", nil, headers, options)
+    |> sign_request(credentials)
     |> send_json_request
   end
 end

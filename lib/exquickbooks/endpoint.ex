@@ -2,6 +2,7 @@ defmodule ExQuickBooks.Endpoint do
   @moduledoc false
 
   alias ExQuickBooks.Request
+  alias ExQuickBooks.OAuth.Credentials
   alias HTTPoison.Response
 
   @default_using_options [base_url: ""]
@@ -12,7 +13,6 @@ defmodule ExQuickBooks.Endpoint do
     quote do
       import unquote(__MODULE__),
         only: [
-          sign_request: 1,
           sign_request: 2,
           send_request: 1
         ]
@@ -32,26 +32,16 @@ defmodule ExQuickBooks.Endpoint do
     end
   end
 
-  def sign_request(request = %Request{}, token \\ %{}) do
-    credentials =
-      token
-      |> Map.take([:token, :token_secret])
-      |> Map.merge(ExQuickBooks.credentials())
-      |> Map.to_list()
-      |> OAuther.credentials()
-
+  def sign_request(request = %Request{}, %Credentials{token: access_token}) do
     request_params =
       (request.options[:params] || [])
       |> append_default_minorversion()
 
-    {header, new_params} =
-      request.method
-      |> to_string
-      |> OAuther.sign(request.url, request_params, credentials)
-      |> OAuther.header()
+    new_headers =
+      request.headers
+      |> merge_headers([{"Authorization", "Bearer #{access_token}"}])
 
-    new_headers = merge_headers(request.headers, [header])
-    new_options = Keyword.put(request.options, :params, new_params)
+    new_options = Keyword.put(request.options, :params, request_params)
 
     %{request | headers: new_headers, options: new_options}
   end

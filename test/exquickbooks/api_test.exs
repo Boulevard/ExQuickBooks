@@ -3,20 +3,19 @@ defmodule ExQuickBooks.APITest do
   use ExQuickBooks.APICase
 
   alias ExQuickBooks.API
-  alias ExQuickBooks.OAuth.AccessToken
+  alias ExQuickBooks.OAuth.Credentials
 
   doctest API
 
-  @token %AccessToken{
+  @creds %Credentials{
     token: "token",
-    token_secret: "secret",
     realm_id: "realm_id"
   }
 
   test "query/2 retrieves a query response" do
     load_response("api/query.json") |> send_response
 
-    assert {:ok, %{"QueryResponse" => _}} = API.query(@token, "SELECT * FROM Item")
+    assert {:ok, %{"QueryResponse" => _}} = API.query(@creds, "SELECT * FROM Item")
 
     assert %{
              url: url,
@@ -37,6 +36,6 @@ defmodule ExQuickBooks.APITest do
     |> Map.put(:status_code, 400)
     |> send_response
 
-    assert {:error, %{"Fault" => _}} = API.query(@token, "SELECT * FROM NULL")
+    assert {:error, %{"Fault" => _}} = API.query(@creds, "SELECT * FROM NULL")
   end
 end

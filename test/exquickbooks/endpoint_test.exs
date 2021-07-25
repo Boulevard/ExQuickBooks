@@ -3,7 +3,7 @@ defmodule ExQuickBooks.EndpointTest do
   use ExQuickBooks.APICase
   use ExQuickBooks.Endpoint, base_url: "http://localhost/"
 
-  alias ExQuickBooks.OAuth.AccessToken
+  alias ExQuickBooks.OAuth.Credentials
   alias ExQuickBooks.Request
 
   doctest ExQuickBooks.Endpoint
@@ -12,28 +12,17 @@ defmodule ExQuickBooks.EndpointTest do
     assert %Request{url: "http://localhost/" <> _} = request(:get, "foo")
   end
 
-  test "sign_request/1 signs with consumer credentials" do
-    assert %Request{
-             headers: [{"Authorization", "OAuth " <> authorization}]
-           } = request(:get, "foo") |> sign_request
-
-    assert String.contains?(authorization, "oauth_consumer_key")
-    refute String.contains?(authorization, "oauth_token")
-  end
-
   test "sign_request/2 signs with consumer credentials and an access token" do
-    token = %AccessToken{
-      token: "token",
-      token_secret: "secret",
+    access_token = "some-random-token"
+
+    credentials = %Credentials{
+      token: access_token,
       realm_id: "realm_id"
     }
 
     assert %Request{
-             headers: [{"Authorization", "OAuth " <> authorization}]
-           } = request(:get, "foo") |> sign_request(token)
-
-    assert String.contains?(authorization, "oauth_consumer_key")
-    assert String.contains?(authorization, "oauth_token")
+             headers: [{"Authorization", "Bearer " <> ^access_token}]
+           } = request(:get, "foo") |> sign_request(credentials)
   end
 
   test "send_request/1 sends the request" do
