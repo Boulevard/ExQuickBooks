@@ -58,10 +58,10 @@ defmodule ExQuickBooks do
   # Returns the QuickBooks Accounting API URL.
   @doc false
   def accounting_api do
-    if get_env(@use_production_api_config, false) do
-      "https://quickbooks.api.intuit.com/v3/"
-    else
-      "https://sandbox-quickbooks.api.intuit.com/v3/"
+    case get_env(@use_production_api_config, false) do
+      url when is_binary(url) -> url
+      true -> "https://quickbooks.api.intuit.com/v3/"
+      false -> "https://sandbox-quickbooks.api.intuit.com/v3/"
     end
   end
 
