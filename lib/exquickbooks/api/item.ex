@@ -20,7 +20,8 @@ defmodule ExQuickBooks.API.Item do
   @spec create_item(Credentials.t(), json_map) ::
           {:ok, json_map} | {:error, any}
   def create_item(credentials, item) do
-    request(:post, "company/#{credentials.realm_id}/item", item)
+    credentials
+    |> make_request(:post, "item", item)
     |> sign_request(credentials)
     |> send_json_request
   end
@@ -31,7 +32,8 @@ defmodule ExQuickBooks.API.Item do
   @spec read_item(Credentials.t(), String.t()) ::
           {:ok, json_map} | {:error, any}
   def read_item(credentials, item_id) do
-    request(:get, "company/#{credentials.realm_id}/item/#{item_id}")
+    credentials
+    |> make_request(:get, "item/#{item_id}")
     |> sign_request(credentials)
     |> send_json_request
   end
@@ -46,7 +48,8 @@ defmodule ExQuickBooks.API.Item do
   @spec update_item(Credentials.t(), json_map) ::
           {:ok, json_map} | {:error, any}
   def update_item(credentials, item) do
-    request(:post, "company/#{credentials.realm_id}/item", item)
+    credentials
+    |> make_request(:post, "item", item)
     |> sign_request(credentials)
     |> send_json_request
   end

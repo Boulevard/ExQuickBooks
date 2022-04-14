@@ -17,7 +17,8 @@ defmodule ExQuickBooks.API.CompanyInfo do
   @spec read_company_info(Credentials.t()) ::
           {:ok, json_map} | {:error, any}
   def read_company_info(credentials) do
-    request(:get, "company/#{credentials.realm_id}/companyinfo/#{credentials.realm_id}")
+    credentials
+    |> make_request(:get, "companyinfo/#{credentials.realm_id}")
     |> sign_request(credentials)
     |> send_json_request()
   end

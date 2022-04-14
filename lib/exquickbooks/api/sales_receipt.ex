@@ -20,7 +20,8 @@ defmodule ExQuickBooks.API.SalesReceipt do
   @spec create_sales_receipt(Credentials.t(), json_map) ::
           {:ok, json_map} | {:error, any}
   def create_sales_receipt(credentials, sales_receipt) do
-    request(:post, "company/#{credentials.realm_id}/salesreceipt", sales_receipt)
+    credentials
+    |> make_request(:post, "salesreceipt", sales_receipt)
     |> sign_request(credentials)
     |> send_json_request
   end
@@ -31,7 +32,8 @@ defmodule ExQuickBooks.API.SalesReceipt do
   @spec read_sales_receipt(Credentials.t(), String.t()) ::
           {:ok, json_map} | {:error, any}
   def read_sales_receipt(credentials, sales_receipt_id) do
-    request(:get, "company/#{credentials.realm_id}/salesreceipt/#{sales_receipt_id}")
+    credentials
+    |> make_request(:get, "salesreceipt/#{sales_receipt_id}")
     |> sign_request(credentials)
     |> send_json_request
   end
@@ -43,7 +45,8 @@ defmodule ExQuickBooks.API.SalesReceipt do
   @spec void_sales_receipt(Credentials.t(), json_map) ::
           {:ok, json_map} | {:error, any}
   def void_sales_receipt(credentials, sales_receipt) do
-    request(:post, "company/#{credentials.realm_id}/salesreceipt", sales_receipt, nil,
+    credentials
+    |> make_request(:post, "salesreceipt", sales_receipt, nil,
       params: [
         {"include", "void"}
       ]

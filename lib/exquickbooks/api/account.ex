@@ -17,7 +17,8 @@ defmodule ExQuickBooks.API.Account do
   @spec read_account(Credentials.t(), String.t()) ::
           {:ok, json_map} | {:error, any}
   def read_account(credentials, account_id) do
-    request(:get, "company/#{credentials.realm_id}/account/#{account_id}")
+    credentials
+    |> make_request(:get, "account/#{account_id}")
     |> sign_request(credentials)
     |> send_json_request()
   end

@@ -18,8 +18,8 @@ defmodule ExQuickBooks.Endpoint do
         ]
 
       @doc false
-      def request(method, url, body \\ nil, headers \\ nil, options \\ nil) do
-        base_url = unquote(merged_using_options)[:base_url]
+      def request(method, url, body \\ nil, headers \\ nil, options \\ []) do
+        base_url = options[:base_url] || unquote(merged_using_options)[:base_url]
 
         %Request{
           method: method,
@@ -28,6 +28,15 @@ defmodule ExQuickBooks.Endpoint do
           headers: headers || [],
           options: options || []
         }
+      end
+
+      def make_request(credentials, method, url, body \\ nil, headers \\ nil, options \\ []) do
+        base_url = options[:base_url] || credentials.base_url
+
+        options =
+          options |> Keyword.put(:base_url, base_url <> "/company/#{credentials.realm_id}/")
+
+        request(method, url, body, headers, options)
       end
     end
   end

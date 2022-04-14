@@ -17,12 +17,14 @@ defmodule ExQuickBooks.OAuth.Credentials do
 
   @type t :: %__MODULE__{
           token: String.t(),
-          realm_id: String.t()
+          realm_id: String.t(),
+          base_url: String.t() | nil
         }
 
   @enforce_keys [
     :token,
-    :realm_id
+    :realm_id,
+    :base_url
   ]
 
   defstruct @enforce_keys

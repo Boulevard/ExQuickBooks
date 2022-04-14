@@ -17,7 +17,8 @@ defmodule ExQuickBooks.API.Preferences do
   @spec read_preferences(Credentials.t()) ::
           {:ok, json_map} | {:error, any}
   def read_preferences(credentials) do
-    request(:get, "company/#{credentials.realm_id}/preferences")
+    credentials
+    |> make_request(:get, "preferences")
     |> sign_request(credentials)
     |> send_json_request
   end
@@ -32,7 +33,8 @@ defmodule ExQuickBooks.API.Preferences do
   @spec update_preferences(Credentials.t(), json_map) ::
           {:ok, json_map} | {:error, any}
   def update_preferences(credentials, preferences) do
-    request(:post, "company/#{credentials.realm_id}/preferences", preferences)
+    credentials
+    |> make_request(:post, "preferences", preferences)
     |> sign_request(credentials)
     |> send_json_request
   end
