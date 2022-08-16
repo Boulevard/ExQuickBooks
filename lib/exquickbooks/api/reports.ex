@@ -14,13 +14,13 @@ defmodule ExQuickBooks.API.Reports do
   @doc """
   Retrieves the given report.
   """
-  @spec read_report(Credentials.t(), String.t(), %{String.t() => String.t()}) ::
+  @spec read_report(Credentials.t(), String.t(), %{String.t() => String.t()}, keyword()) ::
           {:ok, json_map} | {:error, any}
-  def read_report(credentials, report_type, options \\ %{}) do
-    query = URI.encode_query(options)
+  def read_report(credentials, report_type, params \\ %{}, opts \\ []) do
+    query = URI.encode_query(params)
 
     credentials
-    |> make_request(:get, "reports/#{report_type}?#{query}")
+    |> make_request(:get, "reports/#{report_type}?#{query}", nil, nil, opts)
     |> sign_request(credentials)
     |> send_json_request()
   end
