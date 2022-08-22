@@ -12,7 +12,8 @@ defmodule ExQuickBooks.Endpoint.JSON do
 
   @json_headers [
     {"Accept", "application/json"},
-    {"Content-Type", "application/json"}
+    {"Content-Type", "application/json"},
+    {"Accept-Encoding", "gzip, identity"}
   ]
 
   defmacro __using__(_) do
@@ -44,13 +45,13 @@ defmodule ExQuickBooks.Endpoint.JSON do
   end
 
   defp parse_response({ok_error, response = %Response{}}) do
-    is_json =
-      response
-      |> parse_content_type
-      |> String.starts_with?("application/json")
+    is_json = response |> parse_content_type |> String.starts_with?("application/json")
 
     if is_json do
-      {ok_error, Jason.decode!(response.body)}
+      is_gzip = response |> parse_content_encoding |> String.contains?("gzip")
+      body = if is_gzip, do: :zlib.gunzip(response.body), else: response.body
+
+      {ok_error, Jason.decode!(body)}
     else
       {ok_error, response}
     end
@@ -58,6 +59,12 @@ defmodule ExQuickBooks.Endpoint.JSON do
 
   defp parse_response(non_response_result) do
     non_response_result
+  end
+
+  defp parse_content_encoding(%Response{headers: headers}) do
+    Enum.find_value(headers, "chunked", fn {header, value} ->
+      if String.downcase(header) == "content-encoding", do: value
+    end)
   end
 
   defp parse_content_type(%Response{headers: headers}) do

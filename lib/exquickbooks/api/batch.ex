@@ -14,11 +14,11 @@ defmodule ExQuickBooks.API.Batch do
   @doc """
   Performs the given query operations in a single request
   """
-  @spec read_batch(Credentials.t(), list(%{bId: String.t(), Query: String.t()})) ::
+  @spec read_batch(Credentials.t(), list(%{bId: String.t(), Query: String.t()}), keyword()) ::
           {:ok, json_map} | {:error, any}
-  def read_batch(credentials, queries) do
+  def read_batch(credentials, queries, opts \\ []) do
     credentials
-    |> make_request(:post, "batch", Jason.encode!(%{BatchItemRequest: queries}))
+    |> make_request(:post, "batch", Jason.encode!(%{BatchItemRequest: queries}), nil, opts)
     |> sign_request(credentials)
     |> send_json_request()
   end
