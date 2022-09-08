@@ -47,7 +47,7 @@ defmodule ExQuickBooks do
   @credential_config [:consumer_key, :consumer_secret]
   @use_production_api_config :use_production_api
   @minorversion :minorversion
-  @default_minorversion 12
+  @default_minorversion 65
 
   # Returns the Intuit OAuth API URL.
   @doc false
